@@ -2,7 +2,7 @@ package logger
 
 import (
 	"fmt"
-	"github.com/NubeIO/rubix-edge/pkg/config"
+	"github.com/NubeIO/rubix-edge-bios/pkg/config"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"os"
@@ -56,7 +56,7 @@ func New() *logrus.Logger {
 	}
 	logger.SetReportCaller(true)
 	if viper.GetBool("server.log.store") {
-		file := fmt.Sprintf("%s/edge.log", config.Config.GetAbsDataDir())
+		file := fmt.Sprintf("%s/rubix-edge-bios.log", config.Config.GetAbsDataDir())
 		fileHook, err := NewLogrusFileHook(file, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 		if err == nil {
 			logger.Hooks.Add(fileHook)

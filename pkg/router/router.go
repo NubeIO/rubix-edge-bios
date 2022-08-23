@@ -3,10 +3,10 @@ package router
 import (
 	"fmt"
 	"github.com/NubeIO/lib-rubix-installer/installer"
-	"github.com/NubeIO/rubix-edge/controller"
-	"github.com/NubeIO/rubix-edge/pkg/config"
-	"github.com/NubeIO/rubix-edge/pkg/logger"
-	"github.com/NubeIO/rubix-edge/service/apps"
+	"github.com/NubeIO/rubix-edge-bios/controller"
+	"github.com/NubeIO/rubix-edge-bios/pkg/config"
+	"github.com/NubeIO/rubix-edge-bios/pkg/logger"
+	"github.com/NubeIO/rubix-edge-bios/service/apps"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -18,7 +18,7 @@ import (
 
 func NotFound() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		message := fmt.Sprintf("%s %s [%d]: %s", ctx.Request.Method, ctx.Request.URL, 404, "rubix-edge: api not found")
+		message := fmt.Sprintf("%s %s [%d]: %s", ctx.Request.Method, ctx.Request.URL, 404, "rubix-edge-bios: api not found")
 		ctx.JSON(http.StatusNotFound, controller.Message{Message: message})
 	}
 }
@@ -27,7 +27,7 @@ func Setup() *gin.Engine {
 	engine := gin.New()
 	// Set gin access logs
 	if viper.GetBool("gin.log.store") {
-		fileLocation := fmt.Sprintf("%s/edge.access.log", config.Config.GetAbsDataDir())
+		fileLocation := fmt.Sprintf("%s/rubix-edge-bios.access.log", config.Config.GetAbsDataDir())
 		f, err := os.OpenFile(fileLocation, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0755)
 		if err != nil {
 			logger.Logger.Errorf("Failed to create access log file: %v", err)

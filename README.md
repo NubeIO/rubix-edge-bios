@@ -1,6 +1,6 @@
 # job of rubix-bios
 
-- can upload, delete zip, unzip, move files and dirs in `/data` `/bios` `/home/user` and `/etc/system/systemd
+- can upload, delete zip, unzip, move files and dirs in `/data` `/bios` `/home/user` and `/etc/system/systemd`
 - can start, stop, enable, disable, systemctl-reload a service
 
 - bios will be installed in the `/bios` dir

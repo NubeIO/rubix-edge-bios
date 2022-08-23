@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/NubeIO/rubix-edge/pkg/config"
-	"github.com/NubeIO/rubix-edge/pkg/logger"
-	"github.com/NubeIO/rubix-edge/pkg/router"
+	"github.com/NubeIO/rubix-edge-bios/pkg/config"
+	"github.com/NubeIO/rubix-edge-bios/pkg/logger"
+	"github.com/NubeIO/rubix-edge-bios/pkg/router"
 	"github.com/spf13/cobra"
 	"os"
 )

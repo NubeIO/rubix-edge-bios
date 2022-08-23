@@ -3,7 +3,7 @@ package controller
 import (
 	"fmt"
 	fileutils "github.com/NubeIO/lib-dirs/dirs"
-	"github.com/NubeIO/rubix-edge/service/apps"
+	"github.com/NubeIO/rubix-edge-bios/service/apps"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -34,7 +34,7 @@ func reposeHandler(body interface{}, err error, c *gin.Context, statusCode ...in
 			code = http.StatusNotFound
 		}
 		msg := Message{
-			Message: fmt.Sprintf("rubix-edge: %s", err.Error()),
+			Message: fmt.Sprintf("rubix-edge-bios: %s", err.Error()),
 		}
 		c.JSON(code, msg)
 	} else {

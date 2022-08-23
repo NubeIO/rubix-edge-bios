@@ -3,7 +3,7 @@ package controller
 import (
 	"fmt"
 	"github.com/NubeIO/nubeio-rubix-lib-auth-go/externaltoken"
-	"github.com/NubeIO/rubix-edge/pkg/interfaces"
+	"github.com/NubeIO/rubix-edge-bios/pkg/interfaces"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )

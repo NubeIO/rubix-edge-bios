@@ -9,8 +9,6 @@ import (
 const nonRoot = 0700
 const root = 0777
 
-//var FilePerm = root
-
 type EdgeApps struct {
 	App  *installer.App
 	Perm int `json:"file_perm"`

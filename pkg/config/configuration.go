@@ -11,10 +11,6 @@ var Config *Configuration
 var RootCmd *cobra.Command
 
 type Configuration struct {
-	Server   ServerConfiguration
-	Gin      GinConfiguration
-	Database DatabaseConfiguration
-	Path     PathConfiguration
 }
 
 func Setup(rootCmd_ *cobra.Command) error {

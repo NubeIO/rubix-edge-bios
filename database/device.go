@@ -3,7 +3,7 @@ package dbase
 import (
 	"errors"
 	"github.com/NubeIO/lib-uuid/uuid"
-	"github.com/NubeIO/rubix-edge/pkg/model"
+	"github.com/NubeIO/rubix-edge-bios/pkg/model"
 	"time"
 )
 

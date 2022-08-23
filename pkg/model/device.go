@@ -1,14 +1,8 @@
 package model
 
 import (
-	"github.com/NubeIO/lib-command/product"
 	"time"
 )
-
-type BuildInfo struct {
-	DeviceId string          `json:"device_id"`
-	Product  product.Product `json:"product"`
-}
 
 type DeviceInfo struct {
 	UUID        string    `json:"uuid"`

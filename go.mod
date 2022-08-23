@@ -1,4 +1,4 @@
-module github.com/NubeIO/rubix-edge
+module github.com/NubeIO/rubix-edge-bios
 
 //replace github.com/NubeIO/lib-dirs => /home/aidan/code/go/nube/lib/lib-dirs
 //replace github.com/NubeIO/lib-rubix-installer => /home/aidan/code/go/nube/lib/lib-rubix-installer
@@ -7,14 +7,11 @@ go 1.17
 
 require (
 	github.com/NubeIO/lib-command v0.0.2
-	github.com/NubeIO/lib-date v0.0.6
-	github.com/NubeIO/lib-dhcpd v0.0.2
 	github.com/NubeIO/lib-dirs v0.0.7
 	github.com/NubeIO/lib-networking v0.0.7
 	github.com/NubeIO/lib-rubix-installer v0.1.4
 	github.com/NubeIO/lib-schema v0.1.4
 	github.com/NubeIO/lib-systemctl-go v0.1.0
-	github.com/NubeIO/lib-ufw v0.0.3
 	github.com/NubeIO/nubeio-rubix-lib-auth-go v1.0.3
 	github.com/NubeIO/nubeio-rubix-lib-helpers-go v0.2.7
 	github.com/gin-contrib/cors v1.3.1
@@ -23,7 +20,6 @@ require (
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/cobra v1.4.0
 	github.com/spf13/viper v1.11.0
-	gorm.io/driver/sqlite v1.3.2
 	gorm.io/gorm v1.23.5
 )
 
@@ -44,7 +40,6 @@ require (
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
-	github.com/mattn/go-sqlite3 v1.14.12 // indirect
 	github.com/mitchellh/mapstructure v1.4.3 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
