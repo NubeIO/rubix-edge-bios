@@ -18,17 +18,17 @@ var serverCmd = &cobra.Command{
 }
 
 func runServer(cmd *cobra.Command, args []string) {
+	logger.Init()
 	if err := config.Setup(RootCmd); err != nil {
-		logger.Logger.Errorf("config.Setup() error: %s", err)
+		logger.Logger.Errorf("error: %s", err)
 	}
 	if err := os.MkdirAll(config.Config.GetAbsDataDir(), 0755); err != nil {
 		panic(err)
 	}
-	logger.Init()
-	logger.Logger.Infoln("starting edge...")
+	logger.Logger.Infoln("starting edge-bios...")
 
 	if err := database.Setup(); err != nil {
-		logger.Logger.Fatalf("database.Setup() error: %s", err)
+		logger.Logger.Fatalf("error: %s", err)
 	}
 
 	r := router.Setup(database.DB)
