@@ -1,29 +1,67 @@
 package controller
 
 import (
+	"encoding/json"
+	"github.com/NubeIO/rubix-edge-bios/pkg/model"
 	"github.com/gin-gonic/gin"
+	"os"
+	"strings"
+	"time"
 )
 
+const RubixRegistryFile = "/data/rubix-registry/device_info.json"
+
 func (inst *Controller) GetDeviceInfo(c *gin.Context) {
-	// data, err := inst.DB.GetDeviceInfo()
-	// if err != nil {
-	// 	reposeHandler(data, err, c)
-	// 	return
-	// }
-	// reposeHandler(data, err, c)
+	deviceInfo, err := inst.GetDeviceInfoFunc()
+	reposeHandler(deviceInfo, err, c)
 }
 
 func (inst *Controller) UpdateDeviceInfo(c *gin.Context) {
-	// var m *model.DeviceInfo
-	// err = c.ShouldBindJSON(&m)
-	// if err != nil {
-	// 	reposeHandler(nil, err, c)
-	// 	return
-	// }
-	// data, err := inst.DB.UpdateDeviceInfo(m)
-	// if err != nil {
-	// 	reposeHandler(data, err, c)
-	// 	return
-	// }
-	// reposeHandler(data, err, c)
+	var deviceInfo *model.DeviceInfo
+	err := c.ShouldBindJSON(&deviceInfo)
+	if err != nil {
+		reposeHandler(nil, err, c)
+		return
+	}
+
+	deviceInfoOld, err := inst.GetDeviceInfoFunc()
+	if err != nil {
+		reposeHandler(nil, err, c)
+		return
+	}
+
+	deviceInfo.GlobalUUID = deviceInfoOld.GlobalUUID
+	deviceInfo.CreatedOn = deviceInfoOld.CreatedOn
+	deviceInfo.UpdatedOn = strings.TrimSuffix(time.Now().UTC().Format(time.RFC3339Nano), "Z")
+
+	deviceInfoDefault := model.DeviceInfoDefault{
+		DeviceInfoFirstRecord: model.DeviceInfoFirstRecord{
+			DeviceInfo: *deviceInfo,
+		},
+	}
+	deviceInfoDefaultRaw, err := json.Marshal(deviceInfoDefault)
+	_, err = json.Marshal(deviceInfo)
+	if err != nil {
+		reposeHandler(nil, err, c)
+		return
+	}
+	err = os.WriteFile(RubixRegistryFile, deviceInfoDefaultRaw, 0644)
+	if err != nil {
+		reposeHandler(nil, err, c)
+		return
+	}
+	reposeHandler(deviceInfo, err, c)
+}
+
+func (inst *Controller) GetDeviceInfoFunc() (*model.DeviceInfo, error) {
+	data, err := os.ReadFile(RubixRegistryFile)
+	if err != nil {
+		return nil, err
+	}
+	deviceInfoDefault := model.DeviceInfoDefault{}
+	err = json.Unmarshal(data, &deviceInfoDefault)
+	if err != nil {
+		return nil, err
+	}
+	return &deviceInfoDefault.DeviceInfoFirstRecord.DeviceInfo, nil
 }

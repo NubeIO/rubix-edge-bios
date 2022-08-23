@@ -17,10 +17,10 @@ var serverCmd = &cobra.Command{
 }
 
 func runServer(cmd *cobra.Command, args []string) {
-	logger.Init()
 	if err := config.Setup(RootCmd); err != nil {
-		logger.Logger.Errorf("error: %s", err)
+		fmt.Errorf("error: %s", err) // here log is not setup yet...
 	}
+	logger.Init()
 	if err := os.MkdirAll(config.Config.GetAbsDataDir(), 0755); err != nil {
 		panic(err)
 	}

@@ -87,7 +87,7 @@ func Setup() *gin.Engine {
 	files := apiRoutes.Group("/files")
 	{
 		files.GET("/walk", api.WalkFile)
-		files.GET("/list", api.ListFiles) // /api/files/list?file=/data
+		files.GET("/list", api.ListFiles) // /api/files/list?path=/data
 		files.POST("/rename", api.RenameFile)
 		files.POST("/copy", api.CopyFile)
 		files.POST("/move", api.MoveFile)
