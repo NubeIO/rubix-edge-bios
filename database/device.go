@@ -69,34 +69,3 @@ func (db *DB) AddDeviceInfo(body *model.DeviceInfo) (resp *model.DeviceInfo, err
 		return body, nil
 	}
 }
-
-func (db *DB) UpdateDeviceInfo(app *model.DeviceInfo) (*model.DeviceInfo, error) {
-	infos, err := db.getAllDeviceInfos()
-	if err != nil {
-		return nil, err
-	}
-	if len(infos) == 0 {
-		return nil, errors.New("device info has not been added yet")
-	}
-	var m *model.DeviceInfo
-	query := db.DB.Where("uuid = ?", infos[0].UUID).Find(&m).Updates(app)
-	if query.Error != nil {
-		return nil, handleNotFound(deviceInfo)
-	} else {
-		return app, query.Error
-	}
-}
-
-func (db *DB) DeleteDeviceInfo(uuid string) (*DeleteMessage, error) {
-	var m *model.DeviceInfo
-	query := db.DB.Where("uuid = ? ", uuid).Delete(&m)
-	return deleteResponse(query)
-}
-
-// DropDeviceInfo delete all.
-func (db *DB) DropDeviceInfo() (*DeleteMessage, error) {
-	var m *model.DeviceInfo
-	query := db.DB.Where("1 = 1")
-	query.Delete(&m)
-	return deleteResponse(query)
-}

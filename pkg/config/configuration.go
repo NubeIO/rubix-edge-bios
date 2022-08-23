@@ -34,7 +34,6 @@ func Setup(rootCmd_ *cobra.Command) error {
 	}
 	viper.SetDefault("database.driver", "sqlite")
 	viper.SetDefault("database.name", "data.db")
-	viper.SetDefault("database.log.store", false)
 	viper.SetDefault("server.log.store", false)
 	viper.SetDefault("gin.log.store", false)
 	Config = configuration

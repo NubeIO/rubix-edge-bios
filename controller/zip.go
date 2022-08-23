@@ -18,9 +18,11 @@ func (inst *Controller) Unzip(c *gin.Context) {
 	if perm == "" {
 		permission = filePerm
 	} else {
-		permission, err = strconv.Atoi(c.Query("permission"))
+		permission_, err := strconv.Atoi(c.Query("permission"))
 		if err != nil {
 			permission = filePerm
+		} else {
+			permission = permission_
 		}
 	}
 	pathToZip := source
@@ -43,10 +45,6 @@ func (inst *Controller) Unzip(c *gin.Context) {
 func (inst *Controller) ZipDir(c *gin.Context) {
 	source := c.Query("source")
 	destination := c.Query("destination")
-	if err != nil {
-		reposeHandler(nil, err, c)
-		return
-	}
 	pathToZip := source
 	if source == "" {
 		reposeHandler(nil, errors.New("zip source can not be empty, try /data/flow-framework"), c)

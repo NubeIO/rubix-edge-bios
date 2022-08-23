@@ -8,15 +8,11 @@ import (
 
 func (inst *Controller) CreateDir(c *gin.Context) {
 	path := c.Query("path")
-	if err != nil {
-		reposeHandler(nil, err, c)
-		return
-	}
 	if path == "" {
 		reposeHandler(nil, errors.New("path can not be empty"), c)
 		return
 	}
-	err = files.MakeDirectoryIfNotExists(path)
+	err := files.MakeDirectoryIfNotExists(path)
 	reposeHandler(Message{Message: "directory creation is successfully executed"}, err, c)
 }
 
@@ -32,7 +28,7 @@ func (inst *Controller) CopyDir(c *gin.Context) {
 		reposeHandler(nil, errors.New("from dir not found"), c)
 		return
 	}
-	err = fileUtils.Copy(from, to)
+	err := fileUtils.Copy(from, to)
 	if err != nil {
 		reposeHandler(nil, err, c)
 		return
@@ -48,7 +44,7 @@ func (inst *Controller) DeleteDir(c *gin.Context) {
 		return
 	}
 	if !fileUtils.DirExists(path) {
-		reposeHandler(nil, err, c)
+		reposeHandler(nil, errors.New("directory does not exist"), c)
 		return
 	}
 	if recursively {

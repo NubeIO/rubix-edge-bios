@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"github.com/NubeIO/rubix-edge/pkg/config"
-	"github.com/NubeIO/rubix-edge/pkg/database"
 	"github.com/NubeIO/rubix-edge/pkg/logger"
 	"github.com/NubeIO/rubix-edge/pkg/router"
 	"github.com/spf13/cobra"
@@ -27,11 +26,7 @@ func runServer(cmd *cobra.Command, args []string) {
 	}
 	logger.Logger.Infoln("starting edge-bios...")
 
-	if err := database.Setup(); err != nil {
-		logger.Logger.Fatalf("error: %s", err)
-	}
-
-	r := router.Setup(database.DB)
+	r := router.Setup()
 
 	host := "0.0.0.0"
 	port := config.Config.GetPort()

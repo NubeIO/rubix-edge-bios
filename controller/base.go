@@ -3,9 +3,7 @@ package controller
 import (
 	"fmt"
 	fileutils "github.com/NubeIO/lib-dirs/dirs"
-	dbase "github.com/NubeIO/rubix-edge/database"
 	"github.com/NubeIO/rubix-edge/service/apps"
-	"github.com/NubeIO/rubix-edge/service/system"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -17,12 +15,8 @@ var fileUtils = fileutils.New()
 var filePerm = root
 
 type Controller struct {
-	DB     *dbase.DB
-	Rubix  *apps.EdgeApps
-	System *system.System
+	Rubix *apps.EdgeApps
 }
-
-var err error
 
 type Response struct {
 	StatusCode   int         `json:"status_code"`

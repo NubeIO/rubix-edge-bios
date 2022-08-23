@@ -8,7 +8,7 @@ import (
 // CtlAction start, stop, enable, disable a service
 func (inst *Controller) CtlAction(c *gin.Context) {
 	var m *installer.CtlBody
-	err = c.ShouldBindJSON(&m)
+	err := c.ShouldBindJSON(&m)
 	if err != nil {
 		reposeHandler(nil, err, c)
 		return
@@ -24,7 +24,7 @@ func (inst *Controller) CtlAction(c *gin.Context) {
 // CtlStatus check isRunning, isInstalled, isEnabled, isActive, isFailed for a service
 func (inst *Controller) CtlStatus(c *gin.Context) {
 	var m *installer.CtlBody
-	err = c.ShouldBindJSON(&m)
+	err := c.ShouldBindJSON(&m)
 	if err != nil {
 		reposeHandler(nil, err, c)
 		return
@@ -40,7 +40,7 @@ func (inst *Controller) CtlStatus(c *gin.Context) {
 // ServiceMassAction start, stop, enable, disable a service
 func (inst *Controller) ServiceMassAction(c *gin.Context) {
 	var m *installer.CtlBody
-	err = c.ShouldBindJSON(&m)
+	err := c.ShouldBindJSON(&m)
 	if err != nil {
 		reposeHandler(nil, err, c)
 		return
@@ -56,7 +56,7 @@ func (inst *Controller) ServiceMassAction(c *gin.Context) {
 // ServiceMassStatus on mass check isRunning, isInstalled, isEnabled, isActive, isFailed for a service
 func (inst *Controller) ServiceMassStatus(c *gin.Context) {
 	var m *installer.CtlBody
-	err = c.ShouldBindJSON(&m)
+	err := c.ShouldBindJSON(&m)
 	if err != nil {
 		reposeHandler(nil, err, c)
 		return

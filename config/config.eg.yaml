@@ -1,9 +1,6 @@
 database:
   driver: sqlite
   name: data.db
-  log:
-    store: false
-    level: INFO # SILENT, ERROR, WARN, INFO
 server:
   log:
     store: false
