@@ -93,6 +93,8 @@ func Setup() *gin.Engine {
 		files.POST("/move", api.MoveFile)
 		files.POST("/upload", api.UploadFile)
 		files.POST("/download", api.DownloadFile)
+		files.GET("/read", api.ReadFile)
+		files.PUT("/write", api.WriteFile)
 		files.DELETE("/delete", api.DeleteFile)
 		files.DELETE("/delete/all", api.DeleteAllFiles)
 	}

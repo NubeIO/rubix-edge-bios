@@ -138,6 +138,37 @@ func (inst *Controller) UploadFile(c *gin.Context) {
 	reposeHandler(resp, nil, c)
 }
 
+func (inst *Controller) ReadFile(c *gin.Context) {
+	filePath := c.Query("path")
+	if !fileUtils.FileExists(filePath) {
+		reposeHandler(nil, errors.New(fmt.Sprintf("file doesn't exist: %s", filePath)), c)
+		return
+	}
+	content, err := fileUtils.ReadFile(filePath)
+	fcp := FileContentPayload{Data: content}
+	reposeHandler(fcp, err, c)
+}
+
+func (inst *Controller) WriteFile(c *gin.Context) {
+	filePath := c.Query("path")
+	if !fileUtils.FileExists(filePath) {
+		reposeHandler(nil, errors.New(fmt.Sprintf("file doesn't exist: %s", filePath)), c)
+		return
+	}
+	fcp := FileContentPayload{}
+	err := c.ShouldBind(&fcp)
+	if err != nil {
+		reposeHandler(nil, err, c)
+		return
+	}
+	err = fileUtils.WriteFile(filePath, fcp.Data, 0644)
+	if err != nil {
+		reposeHandler(nil, err, c)
+		return
+	}
+	reposeHandler(fcp.Data, nil, c)
+}
+
 func (inst *Controller) DeleteFile(c *gin.Context) {
 	filePath := c.Query("path")
 	if !fileUtils.FileExists(filePath) {
@@ -176,4 +207,8 @@ type UploadResponse struct {
 	File        string `json:"file"`
 	Size        string `json:"size"`
 	UploadTime  string `json:"upload_time"`
+}
+
+type FileContentPayload struct {
+	Data string `json:"data"`
 }
