@@ -11,8 +11,8 @@ import (
 
 var serverCmd = &cobra.Command{
 	Use:   "server",
-	Short: "system admin for edge28",
-	Long:  "pass in the host name and do operation like check arch type of the host",
+	Short: "starting rubix-edge-bios",
+	Long:  "it starts a server for rubix-edge-bios",
 	Run:   runServer,
 }
 
