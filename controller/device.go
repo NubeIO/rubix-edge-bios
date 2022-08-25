@@ -2,14 +2,13 @@ package controller
 
 import (
 	"encoding/json"
+	"github.com/NubeIO/rubix-edge-bios/constants"
 	"github.com/NubeIO/rubix-edge-bios/pkg/model"
 	"github.com/gin-gonic/gin"
 	"os"
 	"strings"
 	"time"
 )
-
-const RubixRegistryFile = "/data/rubix-registry/device_info.json"
 
 func (inst *Controller) GetDeviceInfo(c *gin.Context) {
 	deviceInfo, err := inst.GetDeviceInfoFunc()
@@ -40,12 +39,7 @@ func (inst *Controller) UpdateDeviceInfo(c *gin.Context) {
 		},
 	}
 	deviceInfoDefaultRaw, err := json.Marshal(deviceInfoDefault)
-	_, err = json.Marshal(deviceInfo)
-	if err != nil {
-		reposeHandler(nil, err, c)
-		return
-	}
-	err = os.WriteFile(RubixRegistryFile, deviceInfoDefaultRaw, 0644)
+	err = os.WriteFile(constants.RubixRegistryFile, deviceInfoDefaultRaw, constants.Permission)
 	if err != nil {
 		reposeHandler(nil, err, c)
 		return
@@ -54,7 +48,7 @@ func (inst *Controller) UpdateDeviceInfo(c *gin.Context) {
 }
 
 func (inst *Controller) GetDeviceInfoFunc() (*model.DeviceInfo, error) {
-	data, err := os.ReadFile(RubixRegistryFile)
+	data, err := os.ReadFile(constants.RubixRegistryFile)
 	if err != nil {
 		return nil, err
 	}

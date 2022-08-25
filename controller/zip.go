@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/NubeIO/nubeio-rubix-lib-helpers-go/pkg/system/files"
+	"github.com/NubeIO/rubix-edge-bios/constants"
 	"github.com/gin-gonic/gin"
 	"os"
 	"path"
@@ -16,11 +17,11 @@ func (inst *Controller) Unzip(c *gin.Context) {
 	perm := c.Query("permission")
 	var permission int
 	if perm == "" {
-		permission = filePerm
+		permission = constants.Permission
 	} else {
 		permission_, err := strconv.Atoi(c.Query("permission"))
 		if err != nil {
-			permission = filePerm
+			permission = constants.Permission
 		} else {
 			permission = permission_
 		}

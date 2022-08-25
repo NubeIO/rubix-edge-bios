@@ -3,6 +3,7 @@ package router
 import (
 	"fmt"
 	"github.com/NubeIO/lib-rubix-installer/installer"
+	"github.com/NubeIO/rubix-edge-bios/constants"
 	"github.com/NubeIO/rubix-edge-bios/controller"
 	"github.com/NubeIO/rubix-edge-bios/pkg/config"
 	"github.com/NubeIO/rubix-edge-bios/pkg/logger"
@@ -28,7 +29,7 @@ func Setup() *gin.Engine {
 	// Set gin access logs
 	if viper.GetBool("gin.log.store") {
 		fileLocation := fmt.Sprintf("%s/rubix-edge-bios.access.log", config.Config.GetAbsDataDir())
-		f, err := os.OpenFile(fileLocation, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0755)
+		f, err := os.OpenFile(fileLocation, os.O_CREATE|os.O_WRONLY|os.O_APPEND, constants.Permission)
 		if err != nil {
 			logger.Logger.Errorf("Failed to create access log file: %v", err)
 		} else {

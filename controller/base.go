@@ -8,10 +8,7 @@ import (
 	"net/http"
 )
 
-const root = 0755
-
 var fileUtils = fileutils.New()
-var filePerm = root
 
 type Controller struct {
 	Rubix *apps.EdgeApps

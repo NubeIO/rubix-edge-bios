@@ -4,9 +4,8 @@ import (
 	"errors"
 	"github.com/NubeIO/lib-rubix-installer/installer"
 	"github.com/NubeIO/lib-systemctl-go/systemctl"
+	"github.com/NubeIO/rubix-edge-bios/constants"
 )
-
-const root = 0755
 
 type EdgeApps struct {
 	App  *installer.App
@@ -22,7 +21,7 @@ func New(apps *EdgeApps) (*EdgeApps, error) {
 		return nil, errors.New("app can not be empty")
 	}
 	if apps.App.FilePerm == 0 {
-		apps.App.FilePerm = root
+		apps.App.FilePerm = constants.Permission
 	}
 	if apps.App.DataDir == "" {
 		apps.App.DataDir = "/data"
