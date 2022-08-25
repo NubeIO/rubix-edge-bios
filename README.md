@@ -1,13 +1,13 @@
-# job of rubix-bios
+# Introduction
+This application comes on the device by default.
 
-- can upload, delete zip, unzip, move files and dirs in `/data` `/bios` `/home/user` and `/etc/system/systemd`
-- can start, stop, enable, disable, systemctl-reload a service
+- Creates `/data/rubix-registry/device_info.json` file if it doesn't exist --it is like a MAC address of each device
+- Can upload, delete zip, unzip, move files and dirs in `/data` `/bios` `/home/user` and `/etc/system/systemd`
+- Can start, stop, enable, disable, systemctl-reload a service
+- BIOS will be installed in the `/bios` dir
 
-- bios will be installed in the `/bios` dir
+## How to Install
 
-### files
-https://github.com/NubeIO/rubix-edge/blob/60c36ebaa9bf38831f1d01f0ae12e74a87b184d2/controller/files.go#L17
-
-
-### ctl 
-https://github.com/NubeIO/rubix-assist/blob/ef712bb5e236f3a6cbd928b37bf83856b8a06b5f/controller/edge.go#L24
+- Download the artifacts from the release
+- Unzip it
+- Hit command: `./rubix-edge-bios install`
