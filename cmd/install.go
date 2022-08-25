@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"embed"
 	"fmt"
 	"github.com/NubeIO/lib-systemctl-go/ctl"
 	"github.com/NubeIO/lib-systemctl-go/systemctl"
@@ -11,6 +12,9 @@ import (
 	"strings"
 	"syscall"
 )
+
+//go:embed systemd/nubeio-rubix-edge-bios.service
+var f embed.FS
 
 var installCmd = &cobra.Command{
 	Use:   "install",
@@ -37,7 +41,7 @@ func install(cmd *cobra.Command, args []string) {
 		fmt.Println(err)
 		panic(err)
 	}
-	content, err := os.ReadFile("systemd/nubeio-rubix-edge-bios.service") // TODO check whether we have included it's on build or not
+	content, err := f.ReadFile("systemd/nubeio-rubix-edge-bios.service")
 	if err != nil {
 		fmt.Println(err)
 		panic(err)

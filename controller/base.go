@@ -8,8 +8,7 @@ import (
 	"net/http"
 )
 
-const nonRoot = 0700
-const root = 0777
+const root = 0755
 
 var fileUtils = fileutils.New()
 var filePerm = root

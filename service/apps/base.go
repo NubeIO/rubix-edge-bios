@@ -6,8 +6,7 @@ import (
 	"github.com/NubeIO/lib-systemctl-go/systemctl"
 )
 
-const nonRoot = 0700
-const root = 0777
+const root = 0755
 
 type EdgeApps struct {
 	App  *installer.App
