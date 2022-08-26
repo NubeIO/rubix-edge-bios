@@ -3,7 +3,7 @@ package controller
 import (
 	"fmt"
 	fileutils "github.com/NubeIO/lib-dirs/dirs"
-	"github.com/NubeIO/rubix-edge-bios/service/apps"
+	apps2 "github.com/NubeIO/rubix-edge-bios/apps"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -11,7 +11,7 @@ import (
 var fileUtils = fileutils.New()
 
 type Controller struct {
-	Rubix *apps.EdgeApps
+	Rubix *apps2.EdgeApps
 }
 
 type Response struct {

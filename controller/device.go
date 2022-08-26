@@ -3,7 +3,7 @@ package controller
 import (
 	"encoding/json"
 	"github.com/NubeIO/rubix-edge-bios/constants"
-	"github.com/NubeIO/rubix-edge-bios/pkg/model"
+	"github.com/NubeIO/rubix-edge-bios/model"
 	"github.com/gin-gonic/gin"
 	"os"
 	"strings"

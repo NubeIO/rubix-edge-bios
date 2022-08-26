@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/NubeIO/lib-systemctl-go/ctl"
 	"github.com/NubeIO/lib-systemctl-go/systemctl"
-	"github.com/NubeIO/rubix-edge-bios/pkg/config"
+	"github.com/NubeIO/rubix-edge-bios/config"
 	"github.com/spf13/cobra"
 	"os"
 	"path"
