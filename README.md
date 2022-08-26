@@ -9,8 +9,8 @@ This application comes on the device by default.
 
 ### How to Run
 
-- `go build main.go && sudo ./main server --auth=false`
-- `go build main.go && sudo ./main server --auth`
+- `go build -o rubix-edge-bios main.go && sudo ./rubix-edge-bios server --auth=false`
+- `go build -o rubix-edge-bios main.go && sudo ./rubix-edge-bios server --auth`
 
 ## How to Install
 
