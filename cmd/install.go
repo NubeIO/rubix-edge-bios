@@ -13,8 +13,7 @@ import (
 	"syscall"
 )
 
-//go:embed systemd/nubeio-rubix-edge-bios.service
-var f embed.FS
+var SystemdFs embed.FS
 
 var installCmd = &cobra.Command{
 	Use:   "install",
@@ -41,7 +40,7 @@ func install(cmd *cobra.Command, args []string) {
 		fmt.Println(err)
 		panic(err)
 	}
-	content, err := f.ReadFile("systemd/nubeio-rubix-edge-bios.service")
+	content, err := SystemdFs.ReadFile("systemd/nubeio-rubix-edge-bios.service")
 	if err != nil {
 		fmt.Println(err)
 		panic(err)
