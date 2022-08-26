@@ -64,7 +64,10 @@ func install(cmd *cobra.Command, args []string) {
 	}
 
 	fmt.Println("soft linking linux service...")
-	syscall.Symlink(serviceFile, symlinkServiceFile)
+	err = syscall.Symlink(serviceFile, symlinkServiceFile)
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	fmt.Println("executing installation command...")
 	service := ctl.New(ServiceFileName, "<NOT_NEEDED>")
