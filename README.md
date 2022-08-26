@@ -1,4 +1,5 @@
 # Introduction
+
 This application comes on the device by default.
 
 - Creates `/data/rubix-registry/device_info.json` file if it doesn't exist --it is like a MAC address of each device
@@ -6,8 +7,13 @@ This application comes on the device by default.
 - Can start, stop, enable, disable, systemctl-reload a service
 - BIOS will be installed in the `/bios` dir
 
+### How to Run
+
+- `go build main.go && sudo ./main server --auth=false`
+- `go build main.go && sudo ./main server --auth`
+
 ## How to Install
 
-- Download the artifacts from the release
+- Download the artifacts from the release as per the device type
 - Unzip it
 - Hit command: `./rubix-edge-bios install`
