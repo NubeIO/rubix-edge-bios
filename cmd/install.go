@@ -4,7 +4,6 @@ import (
 	"embed"
 	"fmt"
 	"github.com/NubeIO/lib-systemctl-go/ctl"
-	"github.com/NubeIO/lib-systemctl-go/systemctl"
 	"github.com/NubeIO/rubix-edge-bios/config"
 	"github.com/spf13/cobra"
 	"os"
@@ -69,14 +68,7 @@ func install(cmd *cobra.Command, args []string) {
 	}
 
 	fmt.Println("executing installation command...")
-	service := ctl.New(ServiceFileName, "<NOT_NEEDED>")
-	opts := systemctl.Options{Timeout: 30}
-	installOpts := ctl.InstallOpts{
-		Options: opts,
-	}
-	removeOpts := ctl.RemoveOpts{RemoveOpts: opts}
-	service.InstallOpts = installOpts
-	service.RemoveOpts = removeOpts
+	service := ctl.New(ServiceFileName, false, 30)
 	service.Install()
 	fmt.Println("successfully executed install command...")
 }

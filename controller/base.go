@@ -2,16 +2,13 @@ package controller
 
 import (
 	"fmt"
-	fileutils "github.com/NubeIO/lib-dirs/dirs"
-	apps2 "github.com/NubeIO/rubix-edge-bios/apps"
+	"github.com/NubeIO/rubix-edge-bios/apps"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-var fileUtils = fileutils.New()
-
 type Controller struct {
-	Rubix *apps2.EdgeApps
+	Rubix *apps.EdgeApps
 }
 
 type Response struct {

@@ -3,6 +3,7 @@ package controller
 import (
 	"errors"
 	"fmt"
+	"github.com/NubeIO/lib-files/fileutils"
 	"github.com/NubeIO/nubeio-rubix-lib-helpers-go/pkg/system/files"
 	"github.com/NubeIO/rubix-edge-bios/constants"
 	"github.com/gin-gonic/gin"
@@ -35,7 +36,7 @@ func (inst *Controller) Unzip(c *gin.Context) {
 		reposeHandler(nil, errors.New("zip destination can not be empty, try /data/unzip-test"), c)
 		return
 	}
-	zip, err := fileUtils.UnZip(pathToZip, destination, os.FileMode(permission))
+	zip, err := fileutils.UnZip(pathToZip, destination, os.FileMode(permission))
 	if err != nil {
 		reposeHandler(nil, err, c)
 		return
@@ -56,7 +57,7 @@ func (inst *Controller) ZipDir(c *gin.Context) {
 		return
 	}
 
-	exists := fileUtils.DirExists(pathToZip)
+	exists := fileutils.DirExists(pathToZip)
 	if !exists {
 		reposeHandler(nil, errors.New("dir to zip not found"), c)
 		return
@@ -66,7 +67,7 @@ func (inst *Controller) ZipDir(c *gin.Context) {
 		reposeHandler(nil, err, c)
 		return
 	}
-	err = fileUtils.RecursiveZip(pathToZip, destination)
+	err = fileutils.RecursiveZip(pathToZip, destination)
 	if err != nil {
 		reposeHandler(nil, err, c)
 		return

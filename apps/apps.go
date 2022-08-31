@@ -27,9 +27,6 @@ func New(apps *EdgeApps) (*EdgeApps, error) {
 		apps.App.DataDir = "/data"
 	}
 	apps.App = installer.New(apps.App)
-	apps.Ctl = systemctl.New(&systemctl.Ctl{
-		UserMode: false,
-		Timeout:  30,
-	})
+	apps.Ctl = systemctl.New(false, 30)
 	return apps, nil
 }
