@@ -11,6 +11,7 @@ import (
 type Controller struct {
 	EdgeApp       *apps.EdgeApp
 	RubixRegistry *rubixregistry.RubixRegistry
+	FileMode      int
 }
 
 type Response struct {

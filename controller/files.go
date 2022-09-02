@@ -24,11 +24,7 @@ func (inst *Controller) WalkFile(c *gin.Context) {
 		files = append(files, p)
 		return nil
 	})
-	if err != nil {
-		reposeHandler(nil, err, c)
-		return
-	}
-	reposeHandler(files, nil, c)
+	reposeHandler(files, err, c)
 }
 
 func (inst *Controller) ListFiles(c *gin.Context) {
@@ -74,10 +70,6 @@ func (inst *Controller) CopyFile(c *gin.Context) {
 		return
 	}
 	err := fileutils.Copy(from, to)
-	if err != nil {
-		reposeHandler(nil, err, c)
-		return
-	}
 	reposeHandler(Message{Message: "copying is successfully done"}, err, c)
 }
 
@@ -89,10 +81,6 @@ func (inst *Controller) MoveFile(c *gin.Context) {
 		return
 	}
 	err := fileutils.MoveFile(from, to)
-	if err != nil {
-		reposeHandler(nil, err, c)
-		return
-	}
 	reposeHandler(Message{Message: "moving is successfully done"}, err, c)
 }
 
@@ -139,34 +127,38 @@ func (inst *Controller) UploadFile(c *gin.Context) {
 }
 
 func (inst *Controller) ReadFile(c *gin.Context) {
-	filePath := c.Query("path")
-	if !fileutils.FileExists(filePath) {
-		reposeHandler(nil, errors.New(fmt.Sprintf("file doesn't exist: %s", filePath)), c)
+	path := c.Query("path")
+	if path == "" {
+		reposeHandler(nil, errors.New("file path can not be empty"), c)
 		return
 	}
-	content, err := fileutils.ReadFile(filePath)
-	fcp := FileContentPayload{Data: content}
-	reposeHandler(fcp, err, c)
+	found := fileutils.FileExists(path)
+	if !found {
+		reposeHandler(nil, errors.New(fmt.Sprintf("file not found:%s", path)), c)
+		return
+	}
+	c.File(path)
+}
+
+type WriteFile struct {
+	FilePath     string      `json:"path"`
+	Body         interface{} `json:"body"`
+	BodyAsString string      `json:"body_as_string"`
 }
 
 func (inst *Controller) WriteFile(c *gin.Context) {
-	filePath := c.Query("path")
-	if !fileutils.FileExists(filePath) {
-		reposeHandler(nil, errors.New(fmt.Sprintf("file doesn't exist: %s", filePath)), c)
-		return
-	}
-	fcp := FileContentPayload{}
-	err := c.ShouldBind(&fcp)
+	var m *WriteFile
+	err := c.ShouldBindJSON(&m)
 	if err != nil {
 		reposeHandler(nil, err, c)
 		return
 	}
-	err = fileutils.WriteFile(filePath, fcp.Data, 0644)
-	if err != nil {
-		reposeHandler(nil, err, c)
+	if m.FilePath == "" {
+		reposeHandler(nil, errors.New("file path can not be empty"), c)
 		return
 	}
-	reposeHandler(fcp.Data, nil, c)
+	err = fileutils.WriteFile(m.FilePath, m.BodyAsString, fs.FileMode(inst.FileMode))
+	reposeHandler(Message{Message: fmt.Sprintf("wrote file:%s ok", m.FilePath)}, err, c)
 }
 
 func (inst *Controller) DeleteFile(c *gin.Context) {
@@ -207,8 +199,4 @@ type UploadResponse struct {
 	File        string `json:"file"`
 	Size        string `json:"size"`
 	UploadTime  string `json:"upload_time"`
-}
-
-type FileContentPayload struct {
-	Data string `json:"data"`
 }

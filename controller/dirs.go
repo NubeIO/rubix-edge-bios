@@ -7,6 +7,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func (inst *Controller) DirExists(c *gin.Context) {
+	path := c.Query("path")
+	err := fileutils.DirExistsErr(path)
+	var found bool
+	if err == nil {
+		found = true
+	}
+	reposeHandler(found, nil, c)
+}
+
 func (inst *Controller) CreateDir(c *gin.Context) {
 	path := c.Query("path")
 	if path == "" {

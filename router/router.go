@@ -55,8 +55,7 @@ func Setup() *gin.Engine {
 	}))
 
 	edgeApp := apps.EdgeApp{App: installer.New(&installer.App{})}
-	rubixRegistry := rubixregistry.New()
-	api := controller.Controller{EdgeApp: &edgeApp, RubixRegistry: rubixRegistry}
+	api := controller.Controller{EdgeApp: &edgeApp, RubixRegistry: rubixregistry.New(), FileMode: 0755}
 	engine.POST("/api/users/login", api.Login)
 	systemApi := engine.Group("/api/system")
 	{
@@ -98,6 +97,7 @@ func Setup() *gin.Engine {
 
 	dirs := apiRoutes.Group("/dirs")
 	{
+		dirs.GET("/exists", api.DirExists)
 		dirs.POST("/create", api.CreateDir)
 		dirs.POST("/copy", api.CopyDir)
 		dirs.DELETE("/delete", api.DeleteDir)

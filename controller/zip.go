@@ -5,28 +5,14 @@ import (
 	"fmt"
 	"github.com/NubeIO/lib-files/fileutils"
 	"github.com/NubeIO/nubeio-rubix-lib-helpers-go/pkg/system/files"
-	"github.com/NubeIO/rubix-edge-bios/constants"
 	"github.com/gin-gonic/gin"
 	"os"
 	"path"
-	"strconv"
 )
 
 func (inst *Controller) Unzip(c *gin.Context) {
 	source := c.Query("source")
 	destination := c.Query("destination")
-	perm := c.Query("permission")
-	var permission int
-	if perm == "" {
-		permission = constants.Permission
-	} else {
-		permission_, err := strconv.Atoi(c.Query("permission"))
-		if err != nil {
-			permission = constants.Permission
-		} else {
-			permission = permission_
-		}
-	}
 	pathToZip := source
 	if source == "" {
 		reposeHandler(nil, errors.New("zip source can not be empty, try /data/zip.zip"), c)
@@ -36,7 +22,7 @@ func (inst *Controller) Unzip(c *gin.Context) {
 		reposeHandler(nil, errors.New("zip destination can not be empty, try /data/unzip-test"), c)
 		return
 	}
-	zip, err := fileutils.UnZip(pathToZip, destination, os.FileMode(permission))
+	zip, err := fileutils.UnZip(pathToZip, destination, os.FileMode(inst.FileMode))
 	if err != nil {
 		reposeHandler(nil, err, c)
 		return
