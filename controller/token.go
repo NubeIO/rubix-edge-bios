@@ -20,13 +20,13 @@ func getBodyTokenBlock(ctx *gin.Context) (dto *interfaces2.TokenBlock, err error
 
 func (inst *Controller) GetTokens(c *gin.Context) {
 	q, err := externaltoken.GetExternalTokens()
-	reposeHandler(q, err, c)
+	responseHandler(q, err, c)
 }
 
 func (inst *Controller) GenerateToken(c *gin.Context) {
 	body, err := getBodyTokenCreate(c)
 	if err != nil {
-		reposeHandler(nil, err, c)
+		responseHandler(nil, err, c)
 		return
 	}
 	u := uuid.New().String()
@@ -35,35 +35,35 @@ func (inst *Controller) GenerateToken(c *gin.Context) {
 		Name:    body.Name,
 		Blocked: *body.Blocked})
 	if err != nil {
-		reposeHandler(nil, err, c)
+		responseHandler(nil, err, c)
 		return
 	}
-	reposeHandler(q, err, c)
+	responseHandler(q, err, c)
 }
 
 func (inst *Controller) RegenerateToken(c *gin.Context) {
 	u := c.Param("uuid")
 	q, err := externaltoken.RegenerateExternalToken(u)
 	if err != nil {
-		reposeHandler(nil, err, c)
+		responseHandler(nil, err, c)
 		return
 	}
-	reposeHandler(q, err, c)
+	responseHandler(q, err, c)
 }
 
 func (inst *Controller) BlockToken(c *gin.Context) {
 	u := c.Param("uuid")
 	body, err := getBodyTokenBlock(c)
 	if err != nil {
-		reposeHandler(nil, err, c)
+		responseHandler(nil, err, c)
 		return
 	}
 	q, err := externaltoken.BlockExternalToken(u, *body.Blocked)
-	reposeHandler(q, err, c)
+	responseHandler(q, err, c)
 }
 
 func (inst *Controller) DeleteToken(c *gin.Context) {
 	u := c.Param("uuid")
 	q, err := externaltoken.DeleteExternalToken(u)
-	reposeHandler(q, err, c)
+	responseHandler(q, err, c)
 }

@@ -15,28 +15,28 @@ func getBodyUser(c *gin.Context) (dto *user.User, err error) {
 func (inst *Controller) Login(c *gin.Context) {
 	body, err := getBodyUser(c)
 	if err != nil {
-		reposeHandler(nil, err, c)
+		responseHandler(nil, err, c)
 		return
 	}
 	q, err := user.Login(body)
 	if err != nil {
-		reposeHandler(nil, nerrors2.NewErrUnauthorized(err.Error()), c)
+		responseHandler(nil, nerrors2.NewErrUnauthorized(err.Error()), c)
 		return
 	}
-	reposeHandler(interfaces2.TokenResponse{AccessToken: q, TokenType: "JWT"}, err, c)
+	responseHandler(interfaces2.TokenResponse{AccessToken: q, TokenType: "JWT"}, err, c)
 }
 
 func (inst *Controller) UpdateUser(c *gin.Context) {
 	body, err := getBodyUser(c)
 	if err != nil {
-		reposeHandler(nil, err, c)
+		responseHandler(nil, err, c)
 		return
 	}
 	q, err := user.CreateUser(body)
-	reposeHandler(q, err, c)
+	responseHandler(q, err, c)
 }
 
 func (inst *Controller) GetUser(c *gin.Context) {
 	q, err := user.GetUser()
-	reposeHandler(q, err, c)
+	responseHandler(q, err, c)
 }

@@ -21,7 +21,7 @@ type Response struct {
 	Data         interface{} `json:"data"`
 }
 
-func reposeHandler(body interface{}, err error, c *gin.Context, statusCode ...int) {
+func responseHandler(body interface{}, err error, c *gin.Context, statusCode ...int) {
 	var code int
 	if err != nil {
 		if len(statusCode) > 0 {
