@@ -58,20 +58,20 @@ func Setup() *gin.Engine {
 	rubixRegistry := rubixregistry.New()
 	api := controller.Controller{EdgeApp: &edgeApp, RubixRegistry: rubixRegistry}
 	engine.POST("/api/users/login", api.Login)
+	systemApi := engine.Group("/api/system")
+	{
+		systemApi.GET("/ping", api.Ping)
+		systemApi.GET("/device", api.GetDeviceInfo)
+		systemApi.GET("/product", api.GetProduct)
+	}
 
 	handleAuth := func(c *gin.Context) { c.Next() }
-
 	if config.Config.Auth() {
 		// handleAuth = api.HandleAuth() // TODO add back in auth
 	}
 
 	apiRoutes := engine.Group("/api", handleAuth)
-
-	deviceInfo := apiRoutes.Group("/device")
-	{
-		deviceInfo.GET("/", api.GetDeviceInfo)
-		deviceInfo.PATCH("/", api.UpdateDeviceInfo)
-	}
+	apiRoutes.PATCH("/system/device", api.UpdateDeviceInfo)
 
 	appControl := apiRoutes.Group("/apps/control")
 	{
@@ -79,12 +79,6 @@ func Setup() *gin.Engine {
 		appControl.POST("/action/mass", api.ServiceMassAction) // mass operation start, stop
 		appControl.POST("/status", api.CtlStatus)              // isRunning, isInstalled and so on
 		appControl.POST("/status/mass", api.ServiceMassStatus) // mass isRunning, isInstalled and so on
-	}
-
-	systemApi := apiRoutes.Group("/system")
-	{
-		systemApi.GET("/ping", api.Ping)
-		systemApi.GET("/product", api.GetProduct)
 	}
 
 	files := apiRoutes.Group("/files")
