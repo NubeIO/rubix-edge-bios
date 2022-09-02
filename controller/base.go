@@ -3,12 +3,14 @@ package controller
 import (
 	"fmt"
 	"github.com/NubeIO/rubix-edge-bios/apps"
+	"github.com/NubeIO/rubix-registry-go/rubixregistry"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 type Controller struct {
-	Rubix *apps.EdgeApps
+	EdgeApp       *apps.EdgeApp
+	RubixRegistry *rubixregistry.RubixRegistry
 }
 
 type Response struct {

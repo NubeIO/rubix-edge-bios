@@ -10,6 +10,7 @@ import (
 	"github.com/NubeIO/rubix-edge-bios/logger"
 	"github.com/NubeIO/rubix-edge-bios/model"
 	"github.com/NubeIO/rubix-edge-bios/router"
+	"github.com/NubeIO/rubix-registry-go/rubixregistry"
 	"github.com/spf13/cobra"
 	"os"
 	"strings"
@@ -31,7 +32,11 @@ func runServer(cmd *cobra.Command, args []string) {
 	if err := os.MkdirAll(config.Config.GetAbsDataDir(), os.FileMode(constants.Permission)); err != nil {
 		panic(err)
 	}
-	createDeviceInfoIfDoesNotExist()
+	rr := rubixregistry.New()
+	err := rr.CreateDeviceInfoIfDoesNotExist()
+	if err != nil {
+		panic(err)
+	}
 	logger.Logger.Infoln("starting edge-bios...")
 
 	r := router.Setup()

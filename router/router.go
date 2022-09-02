@@ -8,6 +8,7 @@ import (
 	"github.com/NubeIO/rubix-edge-bios/constants"
 	"github.com/NubeIO/rubix-edge-bios/controller"
 	"github.com/NubeIO/rubix-edge-bios/logger"
+	"github.com/NubeIO/rubix-registry-go/rubixregistry"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -53,8 +54,9 @@ func Setup() *gin.Engine {
 		MaxAge:                 12 * time.Hour,
 	}))
 
-	rubixApps, _ := apps.New(&apps.EdgeApps{App: &installer.App{}})
-	api := controller.Controller{Rubix: rubixApps}
+	edgeApp := apps.EdgeApp{App: installer.New(&installer.App{})}
+	rubixRegistry := rubixregistry.New()
+	api := controller.Controller{EdgeApp: &edgeApp, RubixRegistry: rubixRegistry}
 	engine.POST("/api/users/login", api.Login)
 
 	handleAuth := func(c *gin.Context) { c.Next() }

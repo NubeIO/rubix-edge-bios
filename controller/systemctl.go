@@ -13,7 +13,7 @@ func (inst *Controller) CtlAction(c *gin.Context) {
 		reposeHandler(nil, err, c)
 		return
 	}
-	data, err := inst.Rubix.App.CtlAction(m)
+	data, err := inst.EdgeApp.App.CtlAction(m)
 	if err != nil {
 		reposeHandler(nil, err, c)
 		return
@@ -29,7 +29,7 @@ func (inst *Controller) CtlStatus(c *gin.Context) {
 		reposeHandler(nil, err, c)
 		return
 	}
-	data, err := inst.Rubix.App.CtlStatus(m)
+	data, err := inst.EdgeApp.App.CtlStatus(m)
 	if err != nil {
 		reposeHandler(nil, err, c)
 		return
@@ -45,7 +45,7 @@ func (inst *Controller) ServiceMassAction(c *gin.Context) {
 		reposeHandler(nil, err, c)
 		return
 	}
-	data, err := inst.Rubix.App.ServiceMassAction(m)
+	data, err := inst.EdgeApp.App.ServiceMassAction(m)
 	if err != nil {
 		reposeHandler(nil, err, c)
 		return
@@ -61,7 +61,7 @@ func (inst *Controller) ServiceMassStatus(c *gin.Context) {
 		reposeHandler(nil, err, c)
 		return
 	}
-	data, err := inst.Rubix.App.ServiceMassStatus(m)
+	data, err := inst.EdgeApp.App.ServiceMassStatus(m)
 	if err != nil {
 		reposeHandler(nil, err, c)
 		return
