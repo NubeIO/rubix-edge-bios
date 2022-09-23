@@ -3,7 +3,7 @@ package cmd
 import (
 	"embed"
 	"fmt"
-	"github.com/NubeIO/lib-systemctl-go/ctl"
+	"github.com/NubeIO/lib-systemctl-go/systemctl"
 	"github.com/NubeIO/rubix-edge-bios/config"
 	"github.com/spf13/cobra"
 	"os"
@@ -67,9 +67,24 @@ func install(cmd *cobra.Command, args []string) {
 		fmt.Println(err)
 	}
 
-	fmt.Println("executing installation command...")
-	service := ctl.New(ServiceFileName, false, 30)
-	service.Install()
+	fmt.Println("executing daemon-reload...")
+	systemCtl := systemctl.New(false, 30)
+	err = systemCtl.DaemonReload()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("enabling linux service...")
+	err = systemCtl.Enable(ServiceFileName)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("starting linux service...")
+	err = systemCtl.Restart(ServiceFileName)
+	if err != nil {
+		fmt.Println(err)
+	}
 	fmt.Println("successfully executed install command...")
 }
 

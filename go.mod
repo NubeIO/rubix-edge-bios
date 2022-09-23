@@ -2,17 +2,16 @@ module github.com/NubeIO/rubix-edge-bios
 
 //replace github.com/NubeIO/lib-dirs => /home/aidan/code/go/nube/lib/lib-dirs
 //replace github.com/NubeIO/lib-rubix-installer => /home/aidan/code/go/nube/lib/lib-rubix-installer
-replace github.com/NubeIO/rubix-registry-go => /Users/raibnod/Enviro/rubix-registry-go
+//replace github.com/NubeIO/rubix-registry-go => /Users/raibnod/Enviro/rubix-registry-go
 
 go 1.17
 
 require (
-	github.com/NubeIO/rubix-registry-go v0.0.1
 	github.com/NubeIO/lib-files v0.1.1
-	github.com/NubeIO/lib-rubix-installer v0.2.2
-	github.com/NubeIO/lib-systemctl-go v0.1.2
+	github.com/NubeIO/lib-systemctl-go v0.2.0
 	github.com/NubeIO/nubeio-rubix-lib-auth-go v1.0.3
 	github.com/NubeIO/nubeio-rubix-lib-helpers-go v0.2.7
+	github.com/NubeIO/rubix-registry-go v0.0.1
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.8.1
 	github.com/google/uuid v1.1.2

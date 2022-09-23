@@ -2,14 +2,14 @@ package controller
 
 import (
 	"fmt"
-	"github.com/NubeIO/rubix-edge-bios/apps"
+	"github.com/NubeIO/lib-systemctl-go/systemctl"
 	"github.com/NubeIO/rubix-registry-go/rubixregistry"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 type Controller struct {
-	EdgeApp       *apps.EdgeApp
+	SystemCtl     *systemctl.SystemCtl
 	RubixRegistry *rubixregistry.RubixRegistry
 	FileMode      int
 }

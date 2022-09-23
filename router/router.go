@@ -2,8 +2,7 @@ package router
 
 import (
 	"fmt"
-	"github.com/NubeIO/lib-rubix-installer/installer"
-	"github.com/NubeIO/rubix-edge-bios/apps"
+	"github.com/NubeIO/lib-systemctl-go/systemctl"
 	"github.com/NubeIO/rubix-edge-bios/config"
 	"github.com/NubeIO/rubix-edge-bios/constants"
 	"github.com/NubeIO/rubix-edge-bios/controller"
@@ -54,14 +53,13 @@ func Setup() *gin.Engine {
 		MaxAge:                 12 * time.Hour,
 	}))
 
-	edgeApp := apps.EdgeApp{App: installer.New(&installer.App{})}
-	api := controller.Controller{EdgeApp: &edgeApp, RubixRegistry: rubixregistry.New(), FileMode: 0755}
+	systemCtl := systemctl.New(false, 30)
+	api := controller.Controller{SystemCtl: systemCtl, RubixRegistry: rubixregistry.New(), FileMode: 0755}
 	engine.POST("/api/users/login", api.Login)
 	systemApi := engine.Group("/api/system")
 	{
 		systemApi.GET("/ping", api.Ping)
 		systemApi.GET("/device", api.GetDeviceInfo)
-		systemApi.GET("/product", api.GetProduct)
 	}
 
 	handleAuth := func(c *gin.Context) { c.Next() }
@@ -71,14 +69,6 @@ func Setup() *gin.Engine {
 
 	apiRoutes := engine.Group("/api", handleAuth)
 	apiRoutes.PATCH("/system/device", api.UpdateDeviceInfo)
-
-	appControl := apiRoutes.Group("/apps/control")
-	{
-		appControl.POST("/action", api.CtlAction)              // start, stop
-		appControl.POST("/action/mass", api.ServiceMassAction) // mass operation start, stop
-		appControl.POST("/status", api.CtlStatus)              // isRunning, isInstalled and so on
-		appControl.POST("/status/mass", api.ServiceMassStatus) // mass isRunning, isInstalled and so on
-	}
 
 	files := apiRoutes.Group("/files")
 	{
