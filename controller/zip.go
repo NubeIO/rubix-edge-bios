@@ -4,11 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"github.com/NubeIO/lib-files/fileutils"
-	"github.com/NubeIO/nubeio-rubix-lib-helpers-go/pkg/system/files"
 	"github.com/NubeIO/rubix-edge-bios/model"
 	"github.com/gin-gonic/gin"
 	"os"
-	"path"
 )
 
 func (inst *Controller) Unzip(c *gin.Context) {
@@ -49,7 +47,7 @@ func (inst *Controller) ZipDir(c *gin.Context) {
 		responseHandler(nil, errors.New("dir to zip not found"), c)
 		return
 	}
-	err := files.MakeDirectoryIfNotExists(path.Dir(destination))
+	err := os.MkdirAll(destination, os.FileMode(inst.FileMode))
 	if err != nil {
 		responseHandler(nil, err, c)
 		return

@@ -3,9 +3,9 @@ package controller
 import (
 	"errors"
 	"github.com/NubeIO/lib-files/fileutils"
-	"github.com/NubeIO/nubeio-rubix-lib-helpers-go/pkg/system/files"
 	"github.com/NubeIO/rubix-edge-bios/model"
 	"github.com/gin-gonic/gin"
+	"os"
 )
 
 func (inst *Controller) DirExists(c *gin.Context) {
@@ -24,7 +24,7 @@ func (inst *Controller) CreateDir(c *gin.Context) {
 		responseHandler(nil, errors.New("path can not be empty"), c)
 		return
 	}
-	err := files.MakeDirectoryIfNotExists(path)
+	err := os.MkdirAll(path, os.FileMode(inst.FileMode))
 	responseHandler(model.Message{Message: "directory creation is successfully executed"}, err, c)
 }
 
