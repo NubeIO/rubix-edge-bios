@@ -7,6 +7,7 @@ import (
 	"github.com/NubeIO/rubix-edge-bios/constants"
 	"github.com/NubeIO/rubix-edge-bios/controller"
 	"github.com/NubeIO/rubix-edge-bios/logger"
+	"github.com/NubeIO/rubix-edge-bios/model"
 	"github.com/NubeIO/rubix-registry-go/rubixregistry"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -20,7 +21,7 @@ import (
 func NotFound() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		message := fmt.Sprintf("%s %s [%d]: %s", ctx.Request.Method, ctx.Request.URL, 404, "rubix-edge-bios: api not found")
-		ctx.JSON(http.StatusNotFound, controller.Message{Message: message})
+		ctx.JSON(http.StatusNotFound, model.Message{Message: message})
 	}
 }
 

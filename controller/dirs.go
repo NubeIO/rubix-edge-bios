@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/NubeIO/lib-files/fileutils"
 	"github.com/NubeIO/nubeio-rubix-lib-helpers-go/pkg/system/files"
+	"github.com/NubeIO/rubix-edge-bios/model"
 	"github.com/gin-gonic/gin"
 )
 
@@ -24,7 +25,7 @@ func (inst *Controller) CreateDir(c *gin.Context) {
 		return
 	}
 	err := files.MakeDirectoryIfNotExists(path)
-	responseHandler(Message{Message: "directory creation is successfully executed"}, err, c)
+	responseHandler(model.Message{Message: "directory creation is successfully executed"}, err, c)
 }
 
 func (inst *Controller) CopyDir(c *gin.Context) {
@@ -44,7 +45,7 @@ func (inst *Controller) CopyDir(c *gin.Context) {
 		responseHandler(nil, err, c)
 		return
 	}
-	responseHandler(Message{Message: "copying directory is successfully executed"}, err, c)
+	responseHandler(model.Message{Message: "copying directory is successfully executed"}, err, c)
 }
 
 func (inst *Controller) DeleteDir(c *gin.Context) {
@@ -71,6 +72,6 @@ func (inst *Controller) DeleteDir(c *gin.Context) {
 			return
 		}
 	}
-	responseHandler(Message{Message: "deletion of directory is successfully executed"}, nil, c)
+	responseHandler(model.Message{Message: "deletion of directory is successfully executed"}, nil, c)
 	return
 }

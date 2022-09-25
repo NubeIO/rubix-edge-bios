@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/NubeIO/lib-files/fileutils"
+	"github.com/NubeIO/rubix-edge-bios/model"
 	"github.com/gin-gonic/gin"
 	"io/fs"
 	"io/ioutil"
@@ -59,7 +60,7 @@ func (inst *Controller) RenameFile(c *gin.Context) {
 		return
 	}
 	err := fileutils.Rename(oldName, newName)
-	responseHandler(Message{Message: "renaming is successfully done"}, err, c)
+	responseHandler(model.Message{Message: "renaming is successfully done"}, err, c)
 }
 
 func (inst *Controller) CopyFile(c *gin.Context) {
@@ -70,7 +71,7 @@ func (inst *Controller) CopyFile(c *gin.Context) {
 		return
 	}
 	err := fileutils.Copy(from, to)
-	responseHandler(Message{Message: "copying is successfully done"}, err, c)
+	responseHandler(model.Message{Message: "copying is successfully done"}, err, c)
 }
 
 func (inst *Controller) MoveFile(c *gin.Context) {
@@ -81,7 +82,7 @@ func (inst *Controller) MoveFile(c *gin.Context) {
 		return
 	}
 	err := fileutils.MoveFile(from, to)
-	responseHandler(Message{Message: "moving is successfully done"}, err, c)
+	responseHandler(model.Message{Message: "moving is successfully done"}, err, c)
 }
 
 func (inst *Controller) DownloadFile(c *gin.Context) {
@@ -158,7 +159,7 @@ func (inst *Controller) WriteFile(c *gin.Context) {
 		return
 	}
 	err = fileutils.WriteFile(m.FilePath, m.BodyAsString, fs.FileMode(inst.FileMode))
-	responseHandler(Message{Message: fmt.Sprintf("wrote file:%s ok", m.FilePath)}, err, c)
+	responseHandler(model.Message{Message: fmt.Sprintf("wrote file:%s ok", m.FilePath)}, err, c)
 }
 
 func (inst *Controller) DeleteFile(c *gin.Context) {
@@ -168,7 +169,7 @@ func (inst *Controller) DeleteFile(c *gin.Context) {
 		return
 	}
 	err := fileutils.Rm(filePath)
-	responseHandler(Message{Message: fmt.Sprintf("deleted: %s", filePath)}, err, c)
+	responseHandler(model.Message{Message: fmt.Sprintf("deleted: %s", filePath)}, err, c)
 }
 
 func (inst *Controller) DeleteAllFiles(c *gin.Context) {
@@ -178,7 +179,7 @@ func (inst *Controller) DeleteAllFiles(c *gin.Context) {
 		return
 	}
 	err := fileutils.RemoveAllFiles(filePath)
-	responseHandler(Message{Message: fmt.Sprintf("deleted: %s", filePath)}, err, c)
+	responseHandler(model.Message{Message: fmt.Sprintf("deleted: %s", filePath)}, err, c)
 }
 
 func TimeTrack(start time.Time) (out string) {

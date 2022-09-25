@@ -3,6 +3,7 @@ package controller
 import (
 	"fmt"
 	"github.com/NubeIO/lib-systemctl-go/systemctl"
+	"github.com/NubeIO/rubix-edge-bios/model"
 	"github.com/NubeIO/rubix-registry-go/rubixregistry"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -29,7 +30,7 @@ func responseHandler(body interface{}, err error, c *gin.Context, statusCode ...
 		} else {
 			code = http.StatusNotFound
 		}
-		msg := Message{
+		msg := model.Message{
 			Message: fmt.Sprintf("rubix-edge-bios: %s", err.Error()),
 		}
 		c.JSON(code, msg)
@@ -41,9 +42,4 @@ func responseHandler(body interface{}, err error, c *gin.Context, statusCode ...
 		}
 		c.JSON(code, body)
 	}
-}
-
-type Message struct {
-	Message interface{} `json:"message,omitempty"`
-	Data    interface{} `json:"data,omitempty"`
 }

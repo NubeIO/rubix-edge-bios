@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/NubeIO/lib-files/fileutils"
 	"github.com/NubeIO/nubeio-rubix-lib-helpers-go/pkg/system/files"
+	"github.com/NubeIO/rubix-edge-bios/model"
 	"github.com/gin-gonic/gin"
 	"os"
 	"path"
@@ -27,7 +28,7 @@ func (inst *Controller) Unzip(c *gin.Context) {
 		responseHandler(nil, err, c)
 		return
 	}
-	responseHandler(Message{Message: fmt.Sprintf("unzipped successfully, files count: %d", len(zip))}, err, c)
+	responseHandler(model.Message{Message: fmt.Sprintf("unzipped successfully, files count: %d", len(zip))}, err, c)
 }
 
 func (inst *Controller) ZipDir(c *gin.Context) {
@@ -58,5 +59,5 @@ func (inst *Controller) ZipDir(c *gin.Context) {
 		responseHandler(nil, err, c)
 		return
 	}
-	responseHandler(Message{Message: fmt.Sprintf("zip file is created on: %s", destination)}, nil, c)
+	responseHandler(model.Message{Message: fmt.Sprintf("zip file is created on: %s", destination)}, nil, c)
 }
