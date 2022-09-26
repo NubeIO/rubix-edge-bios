@@ -71,6 +71,26 @@ func Setup() *gin.Engine {
 	apiRoutes := engine.Group("/api", handleAuth)
 	apiRoutes.PATCH("/system/device", api.UpdateDeviceInfo)
 
+	appControl := apiRoutes.Group("/systemctl")
+	{
+		appControl.POST("/enable", api.SystemCtlEnable)
+		appControl.POST("/disable", api.SystemCtlDisable)
+		appControl.GET("/show", api.SystemCtlShow)
+		appControl.POST("/start", api.SystemCtlStart)
+		appControl.GET("/status", api.SystemCtlStatus)
+		appControl.POST("/stop", api.SystemCtlStop)
+		appControl.POST("/reset-failed", api.SystemCtlResetFailed)
+		appControl.POST("/daemon-reload", api.SystemCtlDaemonReload)
+		appControl.POST("/restart", api.SystemCtlRestart)
+		appControl.POST("/mask", api.SystemCtlMask)
+		appControl.POST("/unmask", api.SystemCtlUnmask)
+		appControl.GET("/state", api.SystemCtlState)
+		appControl.GET("/is-enabled", api.SystemCtlIsEnabled)
+		appControl.GET("/is-active", api.SystemCtlIsActive)
+		appControl.GET("/is-running", api.SystemCtlIsRunning)
+		appControl.GET("/is-failed", api.SystemCtlIsFailed)
+	}
+
 	files := apiRoutes.Group("/files")
 	{
 		files.GET("/walk", api.WalkFile)
