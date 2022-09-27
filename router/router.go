@@ -91,6 +91,7 @@ func Setup() *gin.Engine {
 		appControl.GET("/is-active", api.SystemCtlIsActive)
 		appControl.GET("/is-running", api.SystemCtlIsRunning)
 		appControl.GET("/is-failed", api.SystemCtlIsFailed)
+		appControl.GET("/is-installed", api.SystemCtlIsInstalled)
 	}
 
 	files := apiRoutes.Group("/files")

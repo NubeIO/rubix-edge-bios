@@ -97,15 +97,15 @@ func (inst *Controller) SystemCtlIsEnabled(c *gin.Context) {
 
 func (inst *Controller) SystemCtlIsActive(c *gin.Context) {
 	unit := c.Query("unit")
-	active, status, err := inst.SystemCtl.IsActive(unit)
-	status_ := model.SystemCtlActiveStatus{Active: active, Status: status}
+	state, status, err := inst.SystemCtl.IsActive(unit)
+	status_ := model.SystemCtlStateStatus{State: state, Status: status}
 	responseHandler(status_, err, c)
 }
 
 func (inst *Controller) SystemCtlIsRunning(c *gin.Context) {
 	unit := c.Query("unit")
-	active, status, err := inst.SystemCtl.IsRunning(unit)
-	status_ := model.SystemCtlActiveStatus{Active: active, Status: status}
+	state, status, err := inst.SystemCtl.IsRunning(unit)
+	status_ := model.SystemCtlStateStatus{State: state, Status: status}
 	responseHandler(status_, err, c)
 }
 
