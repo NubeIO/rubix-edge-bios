@@ -1,7 +1,6 @@
 module github.com/NubeIO/rubix-edge-bios
 
-//replace github.com/NubeIO/lib-dirs => /home/aidan/code/go/nube/lib/lib-dirs
-//replace github.com/NubeIO/lib-rubix-installer => /home/aidan/code/go/nube/lib/lib-rubix-installer
+replace github.com/NubeIO/lib-files => /Users/raibnod/Enviro/lib-files
 //replace github.com/NubeIO/rubix-registry-go => /Users/raibnod/Enviro/rubix-registry-go
 
 go 1.17

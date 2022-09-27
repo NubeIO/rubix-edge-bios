@@ -93,17 +93,19 @@ func Setup() *gin.Engine {
 
 	files := apiRoutes.Group("/files")
 	{
-		files.GET("/walk", api.WalkFile)
-		files.GET("/list", api.ListFiles) // /api/files/list?path=/data
-		files.POST("/rename", api.RenameFile)
-		files.POST("/copy", api.CopyFile)
-		files.POST("/move", api.MoveFile)
-		files.POST("/upload", api.UploadFile)
-		files.POST("/download", api.DownloadFile)
-		files.GET("/read", api.ReadFile)
-		files.PUT("/write", api.WriteFile)
-		files.DELETE("/delete", api.DeleteFile)
-		files.DELETE("/delete/all", api.DeleteAllFiles)
+		files.GET("/exists", api.FileExists)            // needs to be a file
+		files.GET("/walk", api.WalkFile)                // similar as find in linux command
+		files.GET("/list", api.ListFiles)               // list all files and folders
+		files.POST("/create", api.CreateFile)           // create file only
+		files.POST("/copy", api.CopyFile)               // copy either file or folder
+		files.POST("/rename", api.RenameFile)           // rename either file or folder
+		files.POST("/move", api.MoveFile)               // move file only
+		files.POST("/upload", api.UploadFile)           // upload single file
+		files.POST("/download", api.DownloadFile)       // download single file
+		files.GET("/read", api.ReadFile)                // read single file
+		files.PUT("/write", api.WriteFile)              // write single file
+		files.DELETE("/delete", api.DeleteFile)         // delete single file
+		files.DELETE("/delete-all", api.DeleteAllFiles) // deletes file or folder
 	}
 
 	dirs := apiRoutes.Group("/dirs")
