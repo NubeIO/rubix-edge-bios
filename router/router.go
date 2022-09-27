@@ -110,10 +110,8 @@ func Setup() *gin.Engine {
 
 	dirs := apiRoutes.Group("/dirs")
 	{
-		dirs.GET("/exists", api.DirExists)
-		dirs.POST("/create", api.CreateDir)
-		dirs.POST("/copy", api.CopyDir)
-		dirs.DELETE("/delete", api.DeleteDir)
+		dirs.GET("/exists", api.DirExists)  // needs to be a folder
+		dirs.POST("/create", api.CreateDir) // create folder
 	}
 
 	zip := apiRoutes.Group("/zip")
