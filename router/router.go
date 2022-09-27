@@ -57,6 +57,8 @@ func Setup() *gin.Engine {
 	systemCtl := systemctl.New(false, 30)
 	api := controller.Controller{SystemCtl: systemCtl, RubixRegistry: rubixregistry.New(), FileMode: 0755}
 	engine.POST("/api/users/login", api.Login)
+	engine.GET("/api/users", api.GetUser)
+	engine.GET("/api/tokens", api.GetTokens)
 	systemApi := engine.Group("/api/system")
 	{
 		systemApi.GET("/ping", api.Ping)
@@ -123,12 +125,10 @@ func Setup() *gin.Engine {
 	user := apiRoutes.Group("/users")
 	{
 		user.PUT("", api.UpdateUser)
-		user.GET("", api.GetUser)
 	}
 
 	token := apiRoutes.Group("/tokens")
 	{
-		token.GET("", api.GetTokens)
 		token.POST("/generate", api.GenerateToken)
 		token.PUT("/:uuid/block", api.BlockToken)
 		token.PUT("/:uuid/regenerate", api.RegenerateToken)
