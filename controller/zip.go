@@ -7,6 +7,7 @@ import (
 	"github.com/NubeIO/rubix-edge-bios/model"
 	"github.com/gin-gonic/gin"
 	"os"
+	"path/filepath"
 )
 
 func (inst *Controller) Unzip(c *gin.Context) {
@@ -38,16 +39,15 @@ func (inst *Controller) ZipDir(c *gin.Context) {
 		return
 	}
 	if destination == "" {
-		responseHandler(nil, errors.New("zip destination can not be empty, try /home/test/flow-framework.zip"), c)
+		responseHandler(nil, errors.New("zip destination can not be empty, try /data/test/flow-framework.zip"), c)
 		return
 	}
-
 	exists := fileutils.DirExists(pathToZip)
 	if !exists {
-		responseHandler(nil, errors.New("dir to zip not found"), c)
+		responseHandler(nil, errors.New("zip source is not found"), c)
 		return
 	}
-	err := os.MkdirAll(destination, os.FileMode(inst.FileMode))
+	err := os.MkdirAll(filepath.Dir(destination), os.FileMode(inst.FileMode))
 	if err != nil {
 		responseHandler(nil, err, c)
 		return
