@@ -27,7 +27,7 @@ func (inst *Controller) Unzip(c *gin.Context) {
 		responseHandler(nil, err, c)
 		return
 	}
-	responseHandler(model.Message{Message: fmt.Sprintf("unzipped successfully, files count: %d", len(zip))}, err, c)
+	responseHandler(zip, err, c)
 }
 
 func (inst *Controller) ZipDir(c *gin.Context) {

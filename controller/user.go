@@ -2,8 +2,8 @@ package controller
 
 import (
 	"github.com/NubeIO/nubeio-rubix-lib-auth-go/user"
-	interfaces2 "github.com/NubeIO/rubix-edge-bios/interfaces"
-	nerrors2 "github.com/NubeIO/rubix-edge-bios/nerrors"
+	"github.com/NubeIO/rubix-edge-bios/interfaces"
+	"github.com/NubeIO/rubix-edge-bios/nerrors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,10 +20,10 @@ func (inst *Controller) Login(c *gin.Context) {
 	}
 	q, err := user.Login(body)
 	if err != nil {
-		responseHandler(nil, nerrors2.NewErrUnauthorized(err.Error()), c)
+		responseHandler(nil, nerrors.NewErrUnauthorized(err.Error()), c)
 		return
 	}
-	responseHandler(interfaces2.TokenResponse{AccessToken: q, TokenType: "JWT"}, err, c)
+	responseHandler(interfaces.TokenResponse{AccessToken: q, TokenType: "JWT"}, err, c)
 }
 
 func (inst *Controller) UpdateUser(c *gin.Context) {

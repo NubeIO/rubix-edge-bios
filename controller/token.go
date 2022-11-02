@@ -1,11 +1,10 @@
 package controller
 
 import (
-	"fmt"
+	"github.com/NubeIO/lib-uuid/uuid"
 	"github.com/NubeIO/nubeio-rubix-lib-auth-go/externaltoken"
 	interfaces2 "github.com/NubeIO/rubix-edge-bios/interfaces"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 func getBodyTokenCreate(c *gin.Context) (dto *interfaces2.TokenCreate, err error) {
@@ -29,9 +28,8 @@ func (inst *Controller) GenerateToken(c *gin.Context) {
 		responseHandler(nil, err, c)
 		return
 	}
-	u := uuid.New().String()
 	q, err := externaltoken.CreateExternalToken(&externaltoken.ExternalToken{
-		UUID:    fmt.Sprintf("tok_%s", u),
+		UUID:    uuid.ShortUUID("tok"),
 		Name:    body.Name,
 		Blocked: *body.Blocked})
 	if err != nil {
