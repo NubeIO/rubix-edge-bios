@@ -22,6 +22,12 @@ func (inst *Controller) GetTokens(c *gin.Context) {
 	responseHandler(q, err, c)
 }
 
+func (inst *Controller) GetToken(c *gin.Context) {
+	u := c.Param("uuid")
+	q, err := externaltoken.GetExternalToken(u)
+	responseHandler(q, err, c)
+}
+
 func (inst *Controller) GenerateToken(c *gin.Context) {
 	body, err := getBodyTokenCreate(c)
 	if err != nil {

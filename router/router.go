@@ -130,6 +130,7 @@ func Setup() *gin.Engine {
 	token := apiRoutes.Group("/tokens")
 	{
 		token.GET("", api.GetTokens)
+		token.GET("/:uuid", api.GetToken)
 		token.POST("/generate", api.GenerateToken)
 		token.PUT("/:uuid/block", api.BlockToken)
 		token.PUT("/:uuid/regenerate", api.RegenerateToken)
