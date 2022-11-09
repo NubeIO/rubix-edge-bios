@@ -48,6 +48,10 @@ func install(cmd *cobra.Command, args []string) {
 	systemd = strings.Replace(systemd, "<working_dir>", wd, -1)
 	fmt.Println(fmt.Sprintf("systemd file with working directory: %s", wd))
 
+	deviceType := RootCmd.PersistentFlags().Lookup("device-type").Value.String()
+	systemd = strings.Replace(systemd, "<device_type>", deviceType, -1)
+	fmt.Println(fmt.Sprintf("systemd file with device_type: %s", deviceType))
+
 	fmt.Println(fmt.Sprintf("creating service file: %s...", serviceFile))
 	err = os.WriteFile(serviceFile, []byte(systemd), 0644)
 	if err != nil {

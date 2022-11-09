@@ -62,6 +62,7 @@ func Setup() *gin.Engine {
 	{
 		systemApi.GET("/ping", api.Ping)
 		systemApi.GET("/device", api.GetDeviceInfo)
+		systemApi.GET("/device-type", api.GetDeviceType)
 	}
 
 	handleAuth := func(c *gin.Context) { c.Next() }

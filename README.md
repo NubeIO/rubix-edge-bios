@@ -9,11 +9,11 @@ This application comes on the device by default.
 
 ### How to Run
 
-- `go build -o rubix-edge-bios main.go && sudo ./rubix-edge-bios server --auth=false`
-- `go build -o rubix-edge-bios main.go && sudo ./rubix-edge-bios server --auth`
+- `go build -o rubix-edge-bios main.go && sudo ./rubix-edge-bios server --auth=false --device-type=amd64`
+- `go build -o rubix-edge-bios main.go && sudo ./rubix-edge-bios server --auth --device-type=amd64`
 
 ## How to Install
 
 - Download the artifacts from the release as per the device type
 - Unzip it
-- Hit command: `./rubix-edge-bios install`
+- Hit command: `./rubix-edge-bios install --device-type=amd64`
