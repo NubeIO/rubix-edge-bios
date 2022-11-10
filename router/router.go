@@ -94,6 +94,12 @@ func Setup() *gin.Engine {
 		appControl.GET("/is-installed", api.SystemCtlIsInstalled)
 	}
 
+	syscallControl := apiRoutes.Group("/syscall")
+	{
+		syscallControl.POST("/unlink", api.SyscallUnlink)
+		syscallControl.POST("/link", api.SyscallLink)
+	}
+
 	files := apiRoutes.Group("/files")
 	{
 		files.GET("/exists", api.FileExists)            // needs to be a file
