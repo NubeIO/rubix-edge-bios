@@ -145,6 +145,10 @@ func (inst *Controller) UploadFile(c *gin.Context) {
 		responseHandler(resp, err, c)
 		return
 	}
+	if err := os.Chmod(toFileLocation, os.FileMode(inst.FileMode)); err != nil {
+		responseHandler(resp, err, c)
+		return
+	}
 	size, err := fileutils.GetFileSize(toFileLocation)
 	if err != nil {
 		responseHandler(resp, err, c)
