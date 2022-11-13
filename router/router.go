@@ -2,12 +2,13 @@ package router
 
 import (
 	"fmt"
-	"github.com/NubeIO/lib-rubix-installer/installer"
-	"github.com/NubeIO/rubix-edge-bios/apps"
+	"github.com/NubeIO/lib-systemctl-go/systemctl"
 	"github.com/NubeIO/rubix-edge-bios/config"
 	"github.com/NubeIO/rubix-edge-bios/constants"
 	"github.com/NubeIO/rubix-edge-bios/controller"
 	"github.com/NubeIO/rubix-edge-bios/logger"
+	"github.com/NubeIO/rubix-edge-bios/model"
+	"github.com/NubeIO/rubix-registry-go/rubixregistry"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -20,7 +21,7 @@ import (
 func NotFound() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		message := fmt.Sprintf("%s %s [%d]: %s", ctx.Request.Method, ctx.Request.URL, 404, "rubix-edge-bios: api not found")
-		ctx.JSON(http.StatusNotFound, controller.Message{Message: message})
+		ctx.JSON(http.StatusNotFound, model.Message{Message: message})
 	}
 }
 
@@ -53,58 +54,73 @@ func Setup() *gin.Engine {
 		MaxAge:                 12 * time.Hour,
 	}))
 
-	rubixApps, _ := apps.New(&apps.EdgeApps{App: &installer.App{}})
-	api := controller.Controller{Rubix: rubixApps}
+	systemCtl := systemctl.New(false, 30)
+	api := controller.Controller{SystemCtl: systemCtl, RubixRegistry: rubixregistry.New(), FileMode: 0755}
 	engine.POST("/api/users/login", api.Login)
+	engine.GET("/api/users", api.GetUser)
+	systemApi := engine.Group("/api/system")
+	{
+		systemApi.GET("/ping", api.Ping)
+		systemApi.GET("/device", api.GetDeviceInfo)
+		systemApi.GET("/device-type", api.GetDeviceType)
+	}
 
 	handleAuth := func(c *gin.Context) { c.Next() }
-
 	if config.Config.Auth() {
-		// handleAuth = api.HandleAuth() // TODO add back in auth
+		handleAuth = api.HandleAuth()
 	}
 
 	apiRoutes := engine.Group("/api", handleAuth)
+	apiRoutes.PATCH("/system/device", api.UpdateDeviceInfo)
 
-	deviceInfo := apiRoutes.Group("/device")
+	appControl := apiRoutes.Group("/systemctl")
 	{
-		deviceInfo.GET("/", api.GetDeviceInfo)
-		deviceInfo.PATCH("/", api.UpdateDeviceInfo)
+		appControl.POST("/enable", api.SystemCtlEnable)
+		appControl.POST("/disable", api.SystemCtlDisable)
+		appControl.GET("/show", api.SystemCtlShow)
+		appControl.POST("/start", api.SystemCtlStart)
+		appControl.GET("/status", api.SystemCtlStatus)
+		appControl.POST("/stop", api.SystemCtlStop)
+		appControl.POST("/reset-failed", api.SystemCtlResetFailed)
+		appControl.POST("/daemon-reload", api.SystemCtlDaemonReload)
+		appControl.POST("/restart", api.SystemCtlRestart)
+		appControl.POST("/mask", api.SystemCtlMask)
+		appControl.POST("/unmask", api.SystemCtlUnmask)
+		appControl.GET("/state", api.SystemCtlState)
+		appControl.GET("/is-enabled", api.SystemCtlIsEnabled)
+		appControl.GET("/is-active", api.SystemCtlIsActive)
+		appControl.GET("/is-running", api.SystemCtlIsRunning)
+		appControl.GET("/is-failed", api.SystemCtlIsFailed)
+		appControl.GET("/is-installed", api.SystemCtlIsInstalled)
 	}
 
-	appControl := apiRoutes.Group("/apps/control")
+	syscallControl := apiRoutes.Group("/syscall")
 	{
-		appControl.POST("/action", api.CtlAction)              // start, stop
-		appControl.POST("/action/mass", api.ServiceMassAction) // mass operation start, stop
-		appControl.POST("/status", api.CtlStatus)              // isRunning, isInstalled and so on
-		appControl.POST("/status/mass", api.ServiceMassStatus) // mass isRunning, isInstalled and so on
-	}
-
-	systemApi := apiRoutes.Group("/system")
-	{
-		systemApi.GET("/ping", api.Ping)
-		systemApi.GET("/product", api.GetProduct)
+		syscallControl.POST("/unlink", api.SyscallUnlink)
+		syscallControl.POST("/link", api.SyscallLink)
 	}
 
 	files := apiRoutes.Group("/files")
 	{
-		files.GET("/walk", api.WalkFile)
-		files.GET("/list", api.ListFiles) // /api/files/list?path=/data
-		files.POST("/rename", api.RenameFile)
-		files.POST("/copy", api.CopyFile)
-		files.POST("/move", api.MoveFile)
-		files.POST("/upload", api.UploadFile)
-		files.POST("/download", api.DownloadFile)
-		files.GET("/read", api.ReadFile)
-		files.PUT("/write", api.WriteFile)
-		files.DELETE("/delete", api.DeleteFile)
-		files.DELETE("/delete/all", api.DeleteAllFiles)
+		files.GET("/exists", api.FileExists)            // needs to be a file
+		files.GET("/walk", api.WalkFile)                // similar as find in linux command
+		files.GET("/list", api.ListFiles)               // list all files and folders
+		files.POST("/create", api.CreateFile)           // create file only
+		files.POST("/copy", api.CopyFile)               // copy either file or folder
+		files.POST("/rename", api.RenameFile)           // rename either file or folder
+		files.POST("/move", api.MoveFile)               // move file only
+		files.POST("/upload", api.UploadFile)           // upload single file
+		files.POST("/download", api.DownloadFile)       // download single file
+		files.GET("/read", api.ReadFile)                // read single file
+		files.PUT("/write", api.WriteFile)              // write single file
+		files.DELETE("/delete", api.DeleteFile)         // delete single file
+		files.DELETE("/delete-all", api.DeleteAllFiles) // deletes file or folder
 	}
 
 	dirs := apiRoutes.Group("/dirs")
 	{
-		dirs.POST("/create", api.CreateDir)
-		dirs.POST("/copy", api.CopyDir)
-		dirs.DELETE("/delete", api.DeleteDir)
+		dirs.GET("/exists", api.DirExists)  // needs to be a folder
+		dirs.POST("/create", api.CreateDir) // create folder
 	}
 
 	zip := apiRoutes.Group("/zip")
@@ -116,12 +132,12 @@ func Setup() *gin.Engine {
 	user := apiRoutes.Group("/users")
 	{
 		user.PUT("", api.UpdateUser)
-		user.GET("", api.GetUser)
 	}
 
 	token := apiRoutes.Group("/tokens")
 	{
 		token.GET("", api.GetTokens)
+		token.GET("/:uuid", api.GetToken)
 		token.POST("/generate", api.GenerateToken)
 		token.PUT("/:uuid/block", api.BlockToken)
 		token.PUT("/:uuid/regenerate", api.RegenerateToken)

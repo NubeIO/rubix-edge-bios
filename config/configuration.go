@@ -68,3 +68,7 @@ func (conf *Configuration) getDataDir() string {
 func (conf *Configuration) getConfigDir() string {
 	return RootCmd.PersistentFlags().Lookup("config-dir").Value.String()
 }
+
+func (conf *Configuration) GetDeviceType() string {
+	return RootCmd.PersistentFlags().Lookup("device-type").Value.String()
+}

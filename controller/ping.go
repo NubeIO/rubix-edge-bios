@@ -7,5 +7,5 @@ import (
 )
 
 func (inst *Controller) Ping(c *gin.Context) {
-	reposeHandler(interfaces.Ping{Version: release.GetVersion()}, nil, c)
+	responseHandler(interfaces.Ping{Version: release.GetVersion()}, nil, c)
 }

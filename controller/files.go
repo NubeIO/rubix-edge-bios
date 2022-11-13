@@ -3,130 +3,155 @@ package controller
 import (
 	"errors"
 	"fmt"
-	fileutils "github.com/NubeIO/lib-dirs/dirs"
+	"github.com/NubeIO/lib-files/fileutils"
+	"github.com/NubeIO/rubix-edge-bios/model"
 	"github.com/gin-gonic/gin"
 	"io/fs"
 	"io/ioutil"
 	"os"
+	"path"
 	"path/filepath"
 	"regexp"
 	"runtime"
 	"time"
 )
 
+type FileExistence struct {
+	File   string `json:"file"`
+	Exists bool   `json:"exists"`
+}
+
+type UploadResponse struct {
+	Destination string `json:"destination"`
+	File        string `json:"file"`
+	Size        string `json:"size"`
+	UploadTime  string `json:"upload_time"`
+}
+
+func (inst *Controller) FileExists(c *gin.Context) {
+	file := c.Query("file")
+	exists := fileutils.FileExists(file)
+	fileExistence := FileExistence{File: file, Exists: exists}
+	responseHandler(fileExistence, nil, c)
+}
+
 func (inst *Controller) WalkFile(c *gin.Context) {
-	rootDir := c.Query("path")
-	var files []string
-	err := filepath.WalkDir(rootDir, func(p string, d fs.DirEntry, err error) error {
+	path_ := c.Query("path")
+	files := make([]string, 0)
+	err := filepath.WalkDir(path_, func(p string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
 		files = append(files, p)
 		return nil
 	})
-	if err != nil {
-		reposeHandler(nil, err, c)
-		return
-	}
-	reposeHandler(files, nil, c)
+	responseHandler(files, err, c)
 }
 
 func (inst *Controller) ListFiles(c *gin.Context) {
-	path := c.Query("path")
-	fileInfo, err := os.Stat(path)
+	path_ := c.Query("path")
+	fileInfo, err := os.Stat(path_)
 	if err != nil {
-		reposeHandler(nil, err, c)
+		responseHandler(nil, err, c)
 		return
 	}
-	var dirContent []string
+	dirContent := make([]string, 0)
 	if fileInfo.IsDir() {
-		files, err := ioutil.ReadDir(path)
+		files, err := ioutil.ReadDir(path_)
 		if err != nil {
-			reposeHandler(nil, err, c)
+			responseHandler(nil, err, c)
 			return
 		}
 		for _, file := range files {
 			dirContent = append(dirContent, file.Name())
 		}
 	} else {
-		reposeHandler(dirContent, errors.New("it needs to be a directory, found file"), c)
+		responseHandler(dirContent, errors.New("it needs to be a directory, found a file"), c)
 		return
 	}
-	reposeHandler(dirContent, nil, c)
+	responseHandler(dirContent, nil, c)
 }
 
-func (inst *Controller) RenameFile(c *gin.Context) {
-	oldName := c.Query("old")
-	newName := c.Query("new")
-	if oldName == "" || newName == "" {
-		reposeHandler(nil, errors.New("directory, from and to files name can not be empty"), c)
+func (inst *Controller) CreateFile(c *gin.Context) {
+	file := c.Query("file")
+	if file == "" {
+		responseHandler(nil, errors.New("file can not be empty"), c)
 		return
 	}
-	err := fileUtils.Rename(oldName, newName)
-	reposeHandler(Message{Message: "renaming is successfully done"}, err, c)
+	_, err := fileutils.CreateFile(file, os.FileMode(inst.FileMode))
+	responseHandler(model.Message{Message: fmt.Sprintf("created file: %s", file)}, err, c)
 }
 
 func (inst *Controller) CopyFile(c *gin.Context) {
 	from := c.Query("from")
 	to := c.Query("to")
 	if from == "" || to == "" {
-		reposeHandler(nil, errors.New("from and to files name can not be empty"), c)
+		responseHandler(nil, errors.New("from and to names can not be empty"), c)
 		return
 	}
-	err := fileUtils.Copy(from, to)
-	if err != nil {
-		reposeHandler(nil, err, c)
+	err := fileutils.Copy(from, to)
+	responseHandler(model.Message{Message: "copied successfully"}, err, c)
+}
+
+func (inst *Controller) RenameFile(c *gin.Context) {
+	oldPath := c.Query("old_path")
+	newPath := c.Query("new_path")
+	if oldPath == "" || newPath == "" {
+		responseHandler(nil, errors.New("old_path & new_path names can not be empty"), c)
 		return
 	}
-	reposeHandler(Message{Message: "copying is successfully done"}, err, c)
+	err := os.Rename(oldPath, newPath)
+	responseHandler(model.Message{Message: "renamed successfully"}, err, c)
 }
 
 func (inst *Controller) MoveFile(c *gin.Context) {
 	from := c.Query("from")
 	to := c.Query("to")
 	if from == "" || to == "" {
-		reposeHandler(nil, errors.New("from and to files name can not be empty"), c)
+		responseHandler(nil, errors.New("from and to names can not be empty"), c)
 		return
 	}
-	err := fileUtils.MoveFile(from, to)
-	if err != nil {
-		reposeHandler(nil, err, c)
+	if from == to {
+		responseHandler(nil, errors.New("from and to names are same"), c)
 		return
 	}
-	reposeHandler(Message{Message: "moving is successfully done"}, err, c)
+	err := fileutils.MoveFile(from, to)
+	responseHandler(model.Message{Message: "moved successfully"}, err, c)
 }
 
 func (inst *Controller) DownloadFile(c *gin.Context) {
-	path := c.Query("path")
+	path_ := c.Query("path")
 	fileName := c.Query("file")
-	c.FileAttachment(fmt.Sprintf("%s/%s", path, fileName), fileName)
+	c.FileAttachment(fmt.Sprintf("%s/%s", path_, fileName), fileName)
 }
 
-/*
-UploadFile
-// curl -X POST http://localhost:1661/api/files/upload?to=/data/ -F "file=@/home/user/Downloads/bios-master.zip" -H "Content-Type: multipart/form-data"
-*/
+// UploadFile
+// curl -X POST http://localhost:1661/api/files/upload?destination=/data/ -F "file=@/home/user/Downloads/bios-master.zip" -H "Content-Type: multipart/form-data"
 func (inst *Controller) UploadFile(c *gin.Context) {
 	now := time.Now()
-	path := c.Query("destination")
+	destination := c.Query("destination")
 	file, err := c.FormFile("file")
 	resp := &UploadResponse{}
 	if err != nil || file == nil {
-		reposeHandler(resp, err, c)
+		responseHandler(resp, err, c)
 		return
 	}
-	if found := fileutils.New().DirExists(path); !found {
-		reposeHandler(nil, errors.New(fmt.Sprintf("path not found %s", path)), c)
+	if found := fileutils.DirExists(destination); !found {
+		responseHandler(nil, errors.New(fmt.Sprintf("destination not found %s", destination)), c)
 		return
 	}
-	toFileLocation := fmt.Sprintf("%s/%s", path, filepath.Base(file.Filename))
+	toFileLocation := path.Join(destination, filepath.Base(file.Filename))
 	if err := c.SaveUploadedFile(file, toFileLocation); err != nil {
-		reposeHandler(resp, err, c)
+		responseHandler(resp, err, c)
+		return
+	}
+	if err := os.Chmod(toFileLocation, os.FileMode(inst.FileMode)); err != nil {
+		responseHandler(resp, err, c)
 		return
 	}
 	size, err := fileutils.GetFileSize(toFileLocation)
 	if err != nil {
-		reposeHandler(resp, err, c)
+		responseHandler(resp, err, c)
 		return
 	}
 	resp = &UploadResponse{
@@ -135,58 +160,61 @@ func (inst *Controller) UploadFile(c *gin.Context) {
 		Size:        size.String(),
 		UploadTime:  TimeTrack(now),
 	}
-	reposeHandler(resp, nil, c)
+	responseHandler(resp, nil, c)
 }
 
 func (inst *Controller) ReadFile(c *gin.Context) {
-	filePath := c.Query("path")
-	if !fileUtils.FileExists(filePath) {
-		reposeHandler(nil, errors.New(fmt.Sprintf("file doesn't exist: %s", filePath)), c)
+	file := c.Query("file")
+	if file == "" {
+		responseHandler(nil, errors.New("file can not be empty"), c)
 		return
 	}
-	content, err := fileUtils.ReadFile(filePath)
-	fcp := FileContentPayload{Data: content}
-	reposeHandler(fcp, err, c)
+	found := fileutils.FileExists(file)
+	if !found {
+		responseHandler(nil, errors.New(fmt.Sprintf("file not found: %s", file)), c)
+		return
+	}
+	c.File(file)
+}
+
+type WriteFile struct {
+	Data string `json:"data"`
 }
 
 func (inst *Controller) WriteFile(c *gin.Context) {
-	filePath := c.Query("path")
-	if !fileUtils.FileExists(filePath) {
-		reposeHandler(nil, errors.New(fmt.Sprintf("file doesn't exist: %s", filePath)), c)
+	file := c.Query("file")
+	if file == "" {
+		responseHandler(nil, errors.New("file can not be empty"), c)
 		return
 	}
-	fcp := FileContentPayload{}
-	err := c.ShouldBind(&fcp)
+	var m *WriteFile
+	err := c.ShouldBindJSON(&m)
 	if err != nil {
-		reposeHandler(nil, err, c)
+		responseHandler(nil, err, c)
 		return
 	}
-	err = fileUtils.WriteFile(filePath, fcp.Data, 0644)
-	if err != nil {
-		reposeHandler(nil, err, c)
-		return
-	}
-	reposeHandler(fcp.Data, nil, c)
+	err = fileutils.WriteFile(file, m.Data, fs.FileMode(inst.FileMode))
+	responseHandler(model.Message{Message: fmt.Sprintf("wrote the file: %s", file)}, err, c)
 }
 
 func (inst *Controller) DeleteFile(c *gin.Context) {
-	filePath := c.Query("path")
-	if !fileUtils.FileExists(filePath) {
-		reposeHandler(nil, errors.New(fmt.Sprintf("file doesn't exist: %s", filePath)), c)
+	file := c.Query("file")
+	if !fileutils.FileExists(file) {
+		responseHandler(nil, errors.New(fmt.Sprintf("file doesn't exist: %s", file)), c)
 		return
 	}
-	err := fileUtils.Rm(filePath)
-	reposeHandler(Message{Message: fmt.Sprintf("deleted: %s", filePath)}, err, c)
+	err := fileutils.Rm(file)
+	responseHandler(model.Message{Message: fmt.Sprintf("deleted file: %s", file)}, err, c)
 }
 
 func (inst *Controller) DeleteAllFiles(c *gin.Context) {
 	filePath := c.Query("path")
-	if !fileUtils.DirExists(filePath) {
-		reposeHandler(nil, errors.New(fmt.Sprintf("dir doesn't exist: %s", filePath)), c)
+	if !fileutils.FileOrDirExists(filePath) {
+		responseHandler(nil, errors.New(fmt.Sprintf("doesn't exist: %s", filePath)), c)
 		return
 	}
-	err := fileUtils.RemoveAllFiles(filePath)
-	reposeHandler(Message{Message: fmt.Sprintf("deleted: %s", filePath)}, err, c)
+	err := fileutils.RemoveAllFiles(filePath)
+	responseHandler(model.Message{Message: fmt.Sprintf("deleted path: %s", filePath)}, err, c)
 }
 
 func TimeTrack(start time.Time) (out string) {
@@ -200,15 +228,4 @@ func TimeTrack(start time.Time) (out string) {
 	name := runtimeFunc.ReplaceAllString(funcObj.Name(), "$1")
 	out = fmt.Sprintf("%s took %s", name, elapsed)
 	return out
-}
-
-type UploadResponse struct {
-	Destination string `json:"destination"`
-	File        string `json:"file"`
-	Size        string `json:"size"`
-	UploadTime  string `json:"upload_time"`
-}
-
-type FileContentPayload struct {
-	Data string `json:"data"`
 }

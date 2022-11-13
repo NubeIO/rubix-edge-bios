@@ -2,16 +2,17 @@ package controller
 
 import (
 	"fmt"
-	fileutils "github.com/NubeIO/lib-dirs/dirs"
-	apps2 "github.com/NubeIO/rubix-edge-bios/apps"
+	"github.com/NubeIO/lib-systemctl-go/systemctl"
+	"github.com/NubeIO/rubix-edge-bios/model"
+	"github.com/NubeIO/rubix-registry-go/rubixregistry"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-var fileUtils = fileutils.New()
-
 type Controller struct {
-	Rubix *apps2.EdgeApps
+	SystemCtl     *systemctl.SystemCtl
+	RubixRegistry *rubixregistry.RubixRegistry
+	FileMode      int
 }
 
 type Response struct {
@@ -21,7 +22,7 @@ type Response struct {
 	Data         interface{} `json:"data"`
 }
 
-func reposeHandler(body interface{}, err error, c *gin.Context, statusCode ...int) {
+func responseHandler(body interface{}, err error, c *gin.Context, statusCode ...int) {
 	var code int
 	if err != nil {
 		if len(statusCode) > 0 {
@@ -29,7 +30,7 @@ func reposeHandler(body interface{}, err error, c *gin.Context, statusCode ...in
 		} else {
 			code = http.StatusNotFound
 		}
-		msg := Message{
+		msg := model.Message{
 			Message: fmt.Sprintf("rubix-edge-bios: %s", err.Error()),
 		}
 		c.JSON(code, msg)
@@ -41,9 +42,4 @@ func reposeHandler(body interface{}, err error, c *gin.Context, statusCode ...in
 		}
 		c.JSON(code, body)
 	}
-}
-
-type Message struct {
-	Message interface{} `json:"message,omitempty"`
-	Data    interface{} `json:"data,omitempty"`
 }

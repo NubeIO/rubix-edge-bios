@@ -3,13 +3,14 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
-	fileutils "github.com/NubeIO/lib-dirs/dirs"
+	"github.com/NubeIO/lib-files/fileutils"
 	"github.com/NubeIO/lib-uuid/uuid"
 	"github.com/NubeIO/rubix-edge-bios/config"
 	"github.com/NubeIO/rubix-edge-bios/constants"
 	"github.com/NubeIO/rubix-edge-bios/logger"
 	"github.com/NubeIO/rubix-edge-bios/model"
 	"github.com/NubeIO/rubix-edge-bios/router"
+	"github.com/NubeIO/rubix-registry-go/rubixregistry"
 	"github.com/spf13/cobra"
 	"os"
 	"strings"
@@ -31,7 +32,11 @@ func runServer(cmd *cobra.Command, args []string) {
 	if err := os.MkdirAll(config.Config.GetAbsDataDir(), os.FileMode(constants.Permission)); err != nil {
 		panic(err)
 	}
-	createDeviceInfoIfDoesNotExist()
+	rr := rubixregistry.New()
+	err := rr.CreateDeviceInfoIfDoesNotExist()
+	if err != nil {
+		panic(err)
+	}
 	logger.Logger.Infoln("starting edge-bios...")
 
 	r := router.Setup()
@@ -47,14 +52,13 @@ func init() {
 }
 
 func createDeviceInfoIfDoesNotExist() {
-	fileUtils := fileutils.New()
-	dirExist := fileUtils.DirExists(constants.RubixRegistryDir)
+	dirExist := fileutils.DirExists(constants.RubixRegistryDir)
 	if !dirExist {
 		if err := os.MkdirAll(constants.RubixRegistryDir, os.FileMode(constants.Permission)); err != nil {
 			panic(err)
 		}
 	}
-	fileExist := fileUtils.FileExists(constants.RubixRegistryFile)
+	fileExist := fileutils.FileExists(constants.RubixRegistryFile)
 	if !fileExist {
 		deviceInfoDefault := model.DeviceInfoDefault{}
 		currentDate := strings.TrimSuffix(time.Now().UTC().Format(time.RFC3339Nano), "Z")

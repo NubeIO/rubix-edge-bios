@@ -3,7 +3,6 @@ package cmd
 import (
 	"embed"
 	"fmt"
-	"github.com/NubeIO/lib-systemctl-go/ctl"
 	"github.com/NubeIO/lib-systemctl-go/systemctl"
 	"github.com/NubeIO/rubix-edge-bios/config"
 	"github.com/spf13/cobra"
@@ -49,6 +48,10 @@ func install(cmd *cobra.Command, args []string) {
 	systemd = strings.Replace(systemd, "<working_dir>", wd, -1)
 	fmt.Println(fmt.Sprintf("systemd file with working directory: %s", wd))
 
+	deviceType := RootCmd.PersistentFlags().Lookup("device-type").Value.String()
+	systemd = strings.Replace(systemd, "<device_type>", deviceType, -1)
+	fmt.Println(fmt.Sprintf("systemd file with device_type: %s", deviceType))
+
 	fmt.Println(fmt.Sprintf("creating service file: %s...", serviceFile))
 	err = os.WriteFile(serviceFile, []byte(systemd), 0644)
 	if err != nil {
@@ -68,16 +71,24 @@ func install(cmd *cobra.Command, args []string) {
 		fmt.Println(err)
 	}
 
-	fmt.Println("executing installation command...")
-	service := ctl.New(ServiceFileName, "<NOT_NEEDED>")
-	opts := systemctl.Options{Timeout: 30}
-	installOpts := ctl.InstallOpts{
-		Options: opts,
+	fmt.Println("executing daemon-reload...")
+	systemCtl := systemctl.New(false, 30)
+	err = systemCtl.DaemonReload()
+	if err != nil {
+		fmt.Println(err)
 	}
-	removeOpts := ctl.RemoveOpts{RemoveOpts: opts}
-	service.InstallOpts = installOpts
-	service.RemoveOpts = removeOpts
-	service.Install()
+
+	fmt.Println("enabling linux service...")
+	err = systemCtl.Enable(ServiceFileName)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("starting linux service...")
+	err = systemCtl.Restart(ServiceFileName)
+	if err != nil {
+		fmt.Println(err)
+	}
 	fmt.Println("successfully executed install command...")
 }
 
