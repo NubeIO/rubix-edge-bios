@@ -55,12 +55,15 @@ dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
 github.com/DataDog/datadog-go v3.2.0+incompatible/go.mod h1:LButxg5PwREeZtORoXG3tL4fMGNddJ+vMq1mwgfaqoQ=
+github.com/NubeIO/lib-files v0.1.1/go.mod h1:xi4mqMscDl6319i10LFowq5QvwChJLjqHCIJGkGa4RI=
+github.com/NubeIO/lib-files v0.2.0 h1:5i2S6fgF8idUcHY65KcLsPaxSBQOj6SuKKnxKktwl9c=
+github.com/NubeIO/lib-files v0.2.0/go.mod h1:xi4mqMscDl6319i10LFowq5QvwChJLjqHCIJGkGa4RI=
 github.com/NubeIO/lib-systemctl-go v0.2.0 h1:Ch4UmA8LH+YoNVM02tfmb3olCyjmo+qKc7wCtxbq/aM=
 github.com/NubeIO/lib-systemctl-go v0.2.0/go.mod h1:P/Ij5pgTtjNnp/TQhsvwipk8sv+5cbZdtuvHiPAYXCE=
 github.com/NubeIO/lib-uuid v0.0.3 h1:OkjJWXLOLmEZozBYESsqXZUy9JJ3YKAfxpb2v9rDg6k=
 github.com/NubeIO/lib-uuid v0.0.3/go.mod h1:lLx2E+mqNntnVsgnA44rEVQXoXzKTcZDYTQdNacJLDg=
-github.com/NubeIO/nubeio-rubix-lib-auth-go v1.0.3 h1:BG93vRFMgL+b7BDX0IgTot8S9eE9GPbj40nb8qzHy1Y=
-github.com/NubeIO/nubeio-rubix-lib-auth-go v1.0.3/go.mod h1:5dAKp8Ut9uNzXKUkyX19R547vHcbrUFvpqt78kSl7oE=
+github.com/NubeIO/nubeio-rubix-lib-auth-go v1.1.0 h1:SuHk1GTTYMuJea20Tky6Nt6CczZYej06GmjaTsbkFCA=
+github.com/NubeIO/nubeio-rubix-lib-auth-go v1.1.0/go.mod h1:5dAKp8Ut9uNzXKUkyX19R547vHcbrUFvpqt78kSl7oE=
 github.com/NubeIO/rubix-registry-go v0.0.1 h1:CRCuE/2FxutuffFFePz9abmOoT/QVYJj6uyez7KARk4=
 github.com/NubeIO/rubix-registry-go v0.0.1/go.mod h1:nz/USWqKNI5Gp6hTNW5V8/Md284fo4ii88gMnqQ7Y2E=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
@@ -218,7 +221,6 @@ github.com/google/pprof v0.0.0-20210601050228-01bbb1931b22/go.mod h1:kpwsk12EmLe
 github.com/google/pprof v0.0.0-20210609004039-a478d1d731e9/go.mod h1:kpwsk12EmLew5upagYY7GY0pfYCcupk39gWOCRROcvE=
 github.com/google/pprof v0.0.0-20210720184732-4bb14d4b1be1/go.mod h1:kpwsk12EmLew5upagYY7GY0pfYCcupk39gWOCRROcvE=
 github.com/google/renameio v0.1.0/go.mod h1:KWCgfxg9yswjAJkECMjeO8J8rahYeXnNhOm40UhjYkI=
-github.com/google/uuid v1.1.2 h1:EVhdT+1Kseyi1/pUmXKaFxYsDNy9RQYkMWRH68J/W7Y=
 github.com/google/uuid v1.1.2/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/googleapis/gax-go/v2 v2.0.4/go.mod h1:0Wqv26UfaUD9n4G6kQubkQ+KchISgw+vpHVxEJEs9eg=
 github.com/googleapis/gax-go/v2 v2.0.5/go.mod h1:DWXyrwAJ9X0FpwwEdw+IPEYBICEFu5mhpdKc/us6bOk=
