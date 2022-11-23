@@ -64,8 +64,8 @@ github.com/NubeIO/lib-uuid v0.0.3 h1:OkjJWXLOLmEZozBYESsqXZUy9JJ3YKAfxpb2v9rDg6k
 github.com/NubeIO/lib-uuid v0.0.3/go.mod h1:lLx2E+mqNntnVsgnA44rEVQXoXzKTcZDYTQdNacJLDg=
 github.com/NubeIO/nubeio-rubix-lib-auth-go v1.1.0 h1:SuHk1GTTYMuJea20Tky6Nt6CczZYej06GmjaTsbkFCA=
 github.com/NubeIO/nubeio-rubix-lib-auth-go v1.1.0/go.mod h1:5dAKp8Ut9uNzXKUkyX19R547vHcbrUFvpqt78kSl7oE=
-github.com/NubeIO/rubix-registry-go v0.0.1 h1:CRCuE/2FxutuffFFePz9abmOoT/QVYJj6uyez7KARk4=
-github.com/NubeIO/rubix-registry-go v0.0.1/go.mod h1:nz/USWqKNI5Gp6hTNW5V8/Md284fo4ii88gMnqQ7Y2E=
+github.com/NubeIO/rubix-registry-go v1.0.0 h1:EOklfvV3NP+zF6DmkRO4OmRttTMdN26LZSOEH35hhd0=
+github.com/NubeIO/rubix-registry-go v1.0.0/go.mod h1:nz/USWqKNI5Gp6hTNW5V8/Md284fo4ii88gMnqQ7Y2E=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=

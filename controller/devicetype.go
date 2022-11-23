@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (inst *Controller) GetDeviceType(c *gin.Context) {
-	deviceType := model.DeviceType{DeviceType: config.Config.GetDeviceType()}
+func (inst *Controller) GetArch(c *gin.Context) {
+	deviceType := model.Arch{Arch: config.Config.GetDeviceType()}
 	responseHandler(deviceType, nil, c)
 }

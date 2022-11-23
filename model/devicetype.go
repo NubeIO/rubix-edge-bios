@@ -1,5 +1,5 @@
 package model
 
-type DeviceType struct {
-	DeviceType string `json:"device_type"`
+type Arch struct {
+	Arch string `json:"arch"`
 }

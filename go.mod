@@ -10,7 +10,7 @@ require (
 	github.com/NubeIO/lib-files v0.2.0
 	github.com/NubeIO/lib-systemctl-go v0.2.0
 	github.com/NubeIO/nubeio-rubix-lib-auth-go v1.1.0
-	github.com/NubeIO/rubix-registry-go v0.0.1
+	github.com/NubeIO/rubix-registry-go v1.0.0
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.8.1
 	github.com/sirupsen/logrus v1.9.0
