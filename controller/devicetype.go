@@ -7,6 +7,6 @@ import (
 )
 
 func (inst *Controller) GetArch(c *gin.Context) {
-	deviceType := model.Arch{Arch: config.Config.GetDeviceType()}
-	responseHandler(deviceType, nil, c)
+	arch := model.Arch{Arch: config.Config.GetArch()}
+	responseHandler(arch, nil, c)
 }

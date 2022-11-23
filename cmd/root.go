@@ -19,14 +19,14 @@ func Execute() {
 }
 
 var flgRoot struct {
-	prod       bool
-	auth       bool
-	port       int
-	rootDir    string
-	appDir     string
-	dataDir    string
-	configDir  string
-	deviceType string
+	prod      bool
+	auth      bool
+	port      int
+	rootDir   string
+	appDir    string
+	dataDir   string
+	configDir string
+	arch      string
 }
 
 func init() {
@@ -37,5 +37,5 @@ func init() {
 	RootCmd.PersistentFlags().StringVarP(&flgRoot.appDir, "app-dir", "a", "./", "app dir")    // in production it will be `rubix-edge-bios`
 	RootCmd.PersistentFlags().StringVarP(&flgRoot.dataDir, "data-dir", "d", "data", "data dir")
 	RootCmd.PersistentFlags().StringVarP(&flgRoot.configDir, "config-dir", "c", "config", "config dir")
-	RootCmd.PersistentFlags().StringVarP(&flgRoot.deviceType, "device-type", "", "armv7", "device type")
+	RootCmd.PersistentFlags().StringVarP(&flgRoot.arch, "arch", "", "armv7", "device type")
 }
