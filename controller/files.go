@@ -49,27 +49,28 @@ func (inst *Controller) WalkFile(c *gin.Context) {
 }
 
 func (inst *Controller) ListFiles(c *gin.Context) {
-	path_ := c.Query("path")
-	fileInfo, err := os.Stat(path_)
+	files, err := inst.listFiles(c.Query("path"))
+	responseHandler(files, err, c)
+}
+
+func (inst *Controller) listFiles(_path string) ([]fileutils.FileDetails, error) {
+	fileInfo, err := os.Stat(_path)
+	dirContent := make([]fileutils.FileDetails, 0)
 	if err != nil {
-		responseHandler(nil, err, c)
-		return
+		return nil, err
 	}
-	dirContent := make([]string, 0)
 	if fileInfo.IsDir() {
-		files, err := ioutil.ReadDir(path_)
+		files, err := ioutil.ReadDir(_path)
 		if err != nil {
-			responseHandler(nil, err, c)
-			return
+			return nil, err
 		}
 		for _, file := range files {
-			dirContent = append(dirContent, file.Name())
+			dirContent = append(dirContent, fileutils.FileDetails{Name: file.Name(), IsDir: file.IsDir()})
 		}
 	} else {
-		responseHandler(dirContent, errors.New("it needs to be a directory, found a file"), c)
-		return
+		return nil, errors.New("it needs to be a directory, found a file")
 	}
-	responseHandler(dirContent, nil, c)
+	return dirContent, nil
 }
 
 func (inst *Controller) CreateFile(c *gin.Context) {
@@ -115,7 +116,7 @@ func (inst *Controller) MoveFile(c *gin.Context) {
 		responseHandler(nil, errors.New("from and to names are same"), c)
 		return
 	}
-	err := fileutils.MoveFile(from, to)
+	err := os.Rename(from, to)
 	responseHandler(model.Message{Message: "moved successfully"}, err, c)
 }
 
@@ -179,6 +180,12 @@ func (inst *Controller) ReadFile(c *gin.Context) {
 
 type WriteFile struct {
 	Data string `json:"data"`
+}
+
+type WriteFormatFile struct {
+	FilePath     string      `json:"path"`
+	Body         interface{} `json:"body"`
+	BodyAsString string      `json:"body_as_string"`
 }
 
 func (inst *Controller) WriteFile(c *gin.Context) {

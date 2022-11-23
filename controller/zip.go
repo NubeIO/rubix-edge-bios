@@ -22,7 +22,7 @@ func (inst *Controller) Unzip(c *gin.Context) {
 		responseHandler(nil, errors.New("zip destination can not be empty, try /data/unzip-test"), c)
 		return
 	}
-	zip, err := fileutils.UnZip(pathToZip, destination, os.FileMode(inst.FileMode))
+	zip, err := fileutils.Unzip(pathToZip, destination, os.FileMode(inst.FileMode))
 	if err != nil {
 		responseHandler(nil, err, c)
 		return
