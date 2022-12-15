@@ -16,4 +16,4 @@ This application comes on the device by default.
 
 - Download the artifacts from the release as per the device type
 - Unzip it
-- Hit command: `./rubix-edge-bios install --arch=amd64`
+- Hit command: `./rubix-edge-bios install --arch=amd64`  on `rubix-compute` `sudo ./rubix-edge-bios install --arch=armv7`
